@@ -4,48 +4,18 @@ import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
 import { ChevronLeft, ChevronRight } from "@lucide/astro";
 import BackgroundBlobs from "@/components/BackgroundBlobs.astro";
+import { navLinks } from "@/constants/navigation";
+import type { Theme, BlobType } from "@/types";
 
 interface Props {
   title: string;
-  theme: "green" | "purple" | "amber";
-  blobType: "rounded-star" | "circle-pentagon" | "diamond-medium-alternates";
+  theme: Theme;
+  blobType: BlobType;
 }
 
 const { title, theme, blobType } = Astro.props;
 
-const themeClasses = {
-  green: "bg-green-lightest",
-  purple: "bg-purple-lightest",
-  amber: "bg-amber-lightest",
-};
-
-const iconThemeClasses = {
-  green: "text-green-darkest",
-  purple: "text-purple-darkest",
-  amber: "text-amber-darkest",
-};
-
-const navLinks = [
-  { label: "Home", path: "/about" },
-  { label: "Projects", path: "/projects" },
-  { label: "Blog", path: "/blog" },
-  { label: "Experience", path: "/experience" },
-  { label: "Contact", path: "/contact" },
-];
-
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
-
-const navInactiveClasses = {
-  green: "bg-green-default",
-  purple: "bg-purple-default",
-  amber: "bg-amber-default",
-};
-
-const navActiveClasses = {
-  green: "bg-green-darkest",
-  purple: "bg-purple-darkest",
-  amber: "bg-amber-darkest",
-};
 ---
 
 <!doctype html>
@@ -53,6 +23,16 @@ const navActiveClasses = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Sebastián Idrobo - Software Engineer portfolio showcasing projects, experience, and blog posts."
+    />
+    <meta property="og:title" content={`${title} | Sebastián's Portfolio`} />
+    <meta
+      property="og:description"
+      content="Sebastián Idrobo - Software Engineer portfolio showcasing projects, experience, and blog posts."
+    />
+    <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | Sebastián's Portfolio</title>
     <Font cssVariable="--font-inter" />
@@ -60,18 +40,19 @@ const navActiveClasses = {
   </head>
 
   <body
-    class={`relative flex flex-col text-black min-h-screen min-w-screen px-40 py-14 justify-center items-center ${themeClasses[theme]}`}
+    class="relative flex min-h-screen min-w-screen flex-col items-center justify-center bg-(--theme-lightest) px-40 py-14 text-black"
+    data-theme={theme}
   >
-    <BackgroundBlobs type={blobType} theme={theme} />
+    <BackgroundBlobs type={blobType} />
 
     <ChevronLeft
       size={92}
-      class={`fixed top-1/2 left-16 z-50 -translate-y-1/2 ${iconThemeClasses[theme]}`}
+      class="fixed top-1/2 left-16 z-50 -translate-y-1/2 text-(--theme-darkest)"
+      aria-hidden="true"
     />
 
-    <!-- Navbar Component inside Layout -->
     <div class="z-10 mt-4 w-full max-w-xl">
-      <nav>
+      <nav aria-label="Main navigation">
         <ul class="flex flex-row justify-center">
           {
             navLinks.map((link) => (
@@ -85,19 +66,16 @@ const navActiveClasses = {
         </ul>
       </nav>
 
-      <!-- Bottom Bar -->
       <div class="flex h-1.5 flex-row">
         {
           navLinks.map((link) => {
             const isActive = currentPath === link.path;
             return (
-              <div
-                class={`flex-1 transition-colors duration-700 ${navInactiveClasses[theme]}`}
-              >
+              <div class="flex-1 bg-(--theme-default) transition-colors duration-700">
                 {isActive && (
                   <div
                     transition:name="nav-indicator"
-                    class={`h-full w-full ${navActiveClasses[theme]}`}
+                    class="bg---theme-darkest) h-full w-full"
                   />
                 )}
               </div>
@@ -113,7 +91,8 @@ const navActiveClasses = {
 
     <ChevronRight
       size={92}
-      class={`fixed top-1/2 right-16 z-50 -translate-y-1/2 ${iconThemeClasses[theme]}`}
+      class="fixed top-1/2 right-16 z-50 -translate-y-1/2 text-(--theme-darkest)"
+      aria-hidden="true"
     />
   </body>
 </html>

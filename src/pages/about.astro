@@ -1,17 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
 import { siPython, siJavascript, siReact } from "simple-icons";
-
-const pageTheme = "green";
-
-const iconThemeClasses = {
-  green: "text-green-dark",
-  purple: "text-purple-dark",
-  amber: "text-amber-dark",
-};
+import meImg from "@/assets/images/me/me.jpg";
+import ciatImg from "@/assets/images/career/CIAT.jpg";
 ---
 
-<Layout title="Home" theme={pageTheme} blobType="rounded-star">
+<Layout title="Home" theme="green" blobType="rounded-star">
   <h1 class="col-span-2 mb-8 text-center text-5xl font-semibold md:py-8">
     Hi! I'm Sebastián Idrobo
   </h1>
@@ -21,11 +16,11 @@ const iconThemeClasses = {
       class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
     >
       <p class="text-lg">
-        I’m a passionate Software Engineer who enjoys solving problems and
+        I'm a passionate Software Engineer who enjoys solving problems and
         taking on challenges that push me to learn more, allowing me to build
         applications with a real impact. I naturally look for ways to refine the
-        workflows and code I work with, as I’m always aiming to deliver the most
-        efficient and high-quality results possible. I’m currently interested
+        workflows and code I work with, as I'm always aiming to deliver the most
+        efficient and high-quality results possible. I'm currently interested
         on:
       </p>
       <ul class="list-inside list-disc text-lg">
@@ -36,8 +31,9 @@ const iconThemeClasses = {
     </div>
 
     <div class="flex flex-1 justify-center">
-      <img
-        src="/src/assets/images/me/me.jpg"
+      <Image
+        src={meImg}
+        alt="Sebastián Idrobo portrait"
         class="my-auto max-h-88 rounded-4xl"
       />
     </div>
@@ -49,8 +45,9 @@ const iconThemeClasses = {
     </h2>
     <div class="flex w-full flex-row gap-32">
       <div class="flex flex-1 justify-center">
-        <img
-          src="/src/assets/images/career/CIAT.jpg"
+        <Image
+          src={ciatImg}
+          alt="CIAT workplace"
           class="my-auto max-h-88 rounded-4xl"
         />
       </div>
@@ -90,15 +87,15 @@ const iconThemeClasses = {
 
   <section class="mt-24 flex w-7/10 flex-row items-center justify-between">
     <div
-      class={`h-12 w-12 fill-current ${iconThemeClasses[pageTheme]}`}
+      class="h-12 w-12 fill-current text-(--theme-dark)"
       set:html={siPython.svg}
     />
     <div
-      class={`h-12 w-12 fill-current ${iconThemeClasses[pageTheme]}`}
+      class="h-12 w-12 fill-current text-(--theme-dark)"
       set:html={siJavascript.svg}
     />
     <div
-      class={`h-12 w-12 fill-current ${iconThemeClasses[pageTheme]}`}
+      class="h-12 w-12 fill-current text-(--theme-dark)"
       set:html={siReact.svg}
     />
   </section>
