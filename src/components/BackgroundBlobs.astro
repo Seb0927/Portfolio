@@ -1,0 +1,55 @@
+---
+interface Props {
+  type: "rounded-star" | "circle-pentagon" | "diamond-medium-alternates";
+  theme: "green" | "purple" | "amber";
+}
+
+const { type, theme } = Astro.props;
+
+const blobThemeClasses = {
+  green: "bg-green-default",
+  purple: "bg-purple-default",
+  amber: "bg-amber-default",
+};
+
+const sizeClass = "h-64 w-64";
+const maskStyle = `-webkit-mask-image: url('src/assets/vectors/${type}.svg'); mask-image: url('src/assets/vectors/${type}.svg'); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;`;
+---
+
+<div
+  transition:name="page-blobs"
+  class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+>
+  <!-- Top Right Web Border Blob: positioned exactly at 0, then translated 50% out -->
+  <div
+    class={`pointer-events-auto absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-300 active:scale-95 ${sizeClass}`}
+  >
+    <div
+      style={maskStyle}
+      class={`h-full w-full animate-[spin_20s_linear_infinite]  ${blobThemeClasses[theme]}`}
+    >
+    </div>
+  </div>
+
+  <!-- Middle Left Border Blob -->
+  <div
+    class={`pointer-events-auto absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-300 active:scale-95 ${sizeClass}`}
+  >
+    <div
+      style={maskStyle}
+      class={`h-full w-full animate-[spin_25s_linear_infinite_reverse]  ${blobThemeClasses[theme]}`}
+    >
+    </div>
+  </div>
+
+  <!-- Bottom Right Web Border Blob -->
+  <div
+    class={`pointer-events-auto absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 cursor-pointer transition-transform duration-300 active:scale-95 ${sizeClass}`}
+  >
+    <div
+      style={maskStyle}
+      class={`h-full w-full animate-[spin_22s_linear_infinite]  ${blobThemeClasses[theme]}`}
+    >
+    </div>
+  </div>
+</div>
