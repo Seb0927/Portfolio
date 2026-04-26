@@ -1,0 +1,105 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { siPython, siJavascript, siReact } from "simple-icons";
+
+const pageTheme = "green";
+
+const iconThemeClasses = {
+  green: "text-green-dark",
+  purple: "text-purple-dark",
+  amber: "text-amber-dark",
+};
+---
+
+<Layout title="Home" theme={pageTheme} blobType="rounded-star">
+  <h1 class="col-span-2 mb-8 text-center text-5xl font-semibold md:py-8">
+    Hi! I'm Sebastián Idrobo
+  </h1>
+
+  <section class="flex w-full flex-row gap-32">
+    <div
+      class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
+    >
+      <p class="text-lg">
+        I’m a passionate Software Engineer who enjoys solving problems and
+        taking on challenges that push me to learn more, allowing me to build
+        applications with a real impact. I naturally look for ways to refine the
+        workflows and code I work with, as I’m always aiming to deliver the most
+        efficient and high-quality results possible. I’m currently interested
+        on:
+      </p>
+      <ul class="list-inside list-disc text-lg">
+        <li>DevOps engineer.</li>
+        <li>Full stack development.</li>
+        <li>Data Science.</li>
+      </ul>
+    </div>
+
+    <div class="flex flex-1 justify-center">
+      <img
+        src="/src/assets/images/me/me.jpg"
+        class="my-auto max-h-88 rounded-4xl"
+      />
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="col-span-2 mb-4 text-center text-4xl font-semibold md:py-8">
+      About myself
+    </h2>
+    <div class="flex w-full flex-row gap-32">
+      <div class="flex flex-1 justify-center">
+        <img
+          src="/src/assets/images/career/CIAT.jpg"
+          class="my-auto max-h-88 rounded-4xl"
+        />
+      </div>
+
+      <div
+        class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
+      >
+        <p class="text-lg">
+          I started my career at Universidad del Valle in 2021, where I built a
+          strong foundation in Software Engineering across multiple fields such
+          as Software Development, Data Science, and Computer Engineering. I
+          have worked in research settings alongside researchers to build
+          applications and maintain data pipelines, as well as in fast-paced
+          environments like startups, providing technical support and
+          collaborating across multiple teams for clients' implementations.
+        </p>
+
+        <p class="text-lg">
+          During this time, I held several part-time roles that helped me gain
+          hard skills like programming languages, frameworks, and technical
+          troubleshooting. These experiences also allowed me to build important
+          soft skills such as communication, time management, adaptability, and
+          curiosity.
+        </p>
+
+        <p class="text-lg">
+          Throughout my career, I've had the opportunity to learn and adapt in
+          diverse environments. I have worked in research settings alongside
+          researchers to build applications and maintain data pipelines, as well
+          as in fast-paced environments like startups, providing technical
+          support and collaborating across multiple teams for clients'
+          implementations.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-24 flex w-7/10 flex-row items-center justify-between">
+    <div
+      class={`h-12 w-12 fill-current ${iconThemeClasses[pageTheme]}`}
+      set:html={siPython.svg}
+    />
+    <div
+      class={`h-12 w-12 fill-current ${iconThemeClasses[pageTheme]}`}
+      set:html={siJavascript.svg}
+    />
+    <div
+      class={`h-12 w-12 fill-current ${iconThemeClasses[pageTheme]}`}
+      set:html={siReact.svg}
+    />
+  </section>
+</Layout>
