@@ -1,5 +1,8 @@
 ---
 import type { BlobType } from "@/types";
+import roundedStar from "@/assets/vectors/rounded-star.svg?raw";
+import circlePentagon from "@/assets/vectors/circle-pentagon.svg?raw";
+import diamondMediumAlternates from "@/assets/vectors/diamond-medium-alternates.svg?raw";
 
 interface Props {
   type: BlobType;
@@ -7,51 +10,102 @@ interface Props {
 
 const { type } = Astro.props;
 
-import roundedStar from "@/assets/vectors/rounded-star.svg";
-import circlePentagon from "@/assets/vectors/circle-pentagon.svg";
-import diamondMediumAlternates from "@/assets/vectors/diamond-medium-alternates.svg";
-
-const blobSvg = {
+const blobSvg: Record<BlobType, string> = {
   "rounded-star": roundedStar,
   "circle-pentagon": circlePentagon,
   "diamond-medium-alternates": diamondMediumAlternates,
 };
 
-const sizeClass = "h-64 w-64";
-const maskStyle = `-webkit-mask-image: url('${blobSvg[type]}'); mask-image: url('${blobSvg[type]}'); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;`;
+const blobs = [
+  {
+    position: "top-0 right-0 translate-x-1/2 -translate-y-1/2",
+    spin: "spin_20s_linear_infinite",
+  },
+  {
+    position: "top-1/2 left-0 -translate-x-1/2 -translate-y-1/2",
+    spin: "spin_25s_linear_infinite_reverse",
+  },
+  {
+    position: "bottom-0 right-0 translate-x-1/2 translate-y-1/2",
+    spin: "spin_22s_linear_infinite",
+  },
+];
 ---
 
 <div
   transition:name="page-blobs"
+  aria-hidden="true"
   class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
 >
-  <div
-    class={`pointer-events-auto absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-300 active:scale-95 ${sizeClass}`}
-  >
-    <div
-      style={maskStyle}
-      class="h-full w-full animate-[spin_20s_linear_infinite] bg-(--theme-default)"
-    >
-    </div>
-  </div>
-
-  <div
-    class={`pointer-events-auto absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-300 active:scale-95 ${sizeClass}`}
-  >
-    <div
-      style={maskStyle}
-      class="h-full w-full animate-[spin_25s_linear_infinite_reverse] bg-(--theme-default)"
-    >
-    </div>
-  </div>
-
-  <div
-    class={`pointer-events-auto absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 cursor-pointer transition-transform duration-300 active:scale-95 ${sizeClass}`}
-  >
-    <div
-      style={maskStyle}
-      class="h-full w-full animate-[spin_22s_linear_infinite] bg-(--theme-default)"
-    >
-    </div>
-  </div>
+  <!--
+    Each blob is split into two nested elements to avoid transform conflicts.
+    Having spin and click-scale on the same element causes a visible skip,
+    since the scale overrides the ongoing rotation. The outer div handles
+    position + click scale, the inner div handles the continuous spin.
+  -->
+  {
+    blobs.map((blob) => (
+      <div
+        data-blob
+        class={`blob-wrapper pointer-events-auto absolute ${blob.position} h-64 w-64 cursor-pointer`}
+      >
+        <div
+          class={`h-full w-full animate-[${blob.spin}] blob-shape`}
+          style={`color: var(--theme-default)`}
+          set:html={blobSvg[type]}
+        />
+      </div>
+    ))
+  }
 </div>
+
+<style>
+  .blob-shape :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes blob-click {
+    0% {
+      scale: 1;
+    }
+    50% {
+      scale: 1.15;
+    }
+    100% {
+      scale: 1;
+    }
+  }
+
+  .blob-wrapper.blob-clicked {
+    animation: blob-click 300ms ease;
+  }
+</style>
+
+<script>
+  import popSound from "@/assets/audio/pop.webm?url";
+
+  const pop = new Audio(popSound);
+
+  document.addEventListener("pointerdown", (e) => {
+    const wrapper = (e.target as HTMLElement).closest(
+      "[data-blob]",
+    ) as HTMLElement | null;
+    if (!wrapper) return;
+
+    pop.currentTime = 0;
+    pop.play();
+
+    wrapper.classList.remove("blob-clicked");
+    requestAnimationFrame(() => {
+      wrapper.classList.add("blob-clicked");
+    });
+  });
+
+  document.addEventListener("animationend", (e) => {
+    const target = e.target as HTMLElement;
+    if (target.dataset.blob !== undefined) {
+      target.classList.remove("blob-clicked");
+    }
+  });
+</script>
