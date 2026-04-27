@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
+import TechIcon from "@/components/TechIcon.astro";
 import { Image } from "astro:assets";
 import { siPython, siJavascript, siReact } from "simple-icons";
 import meImg from "@/assets/images/me/me.jpg";
@@ -85,17 +86,8 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
   </section>
 
   <section class="mt-24 flex w-7/10 flex-row items-center justify-between">
-    <div
-      class="h-12 w-12 fill-current text-(--theme-dark)"
-      set:html={siPython.svg}
-    />
-    <div
-      class="h-12 w-12 fill-current text-(--theme-dark)"
-      set:html={siJavascript.svg}
-    />
-    <div
-      class="h-12 w-12 fill-current text-(--theme-dark)"
-      set:html={siReact.svg}
-    />
+    <TechIcon svg={siPython.svg} />
+    <TechIcon svg={siJavascript.svg} />
+    <TechIcon svg={siReact.svg} />
   </section>
 </Layout>
