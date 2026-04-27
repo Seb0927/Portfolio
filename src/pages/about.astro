@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
 import { Image } from "astro:assets";
 import { siPython, siJavascript, siReact } from "simple-icons";
 import meImg from "@/assets/images/me/me.jpg";
@@ -7,9 +8,7 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
 ---
 
 <Layout title="Home" theme="green" blobType="rounded-star">
-  <h1 class="col-span-2 mb-8 text-center text-5xl font-semibold md:py-8">
-    Hi! I'm Sebastián Idrobo
-  </h1>
+  <PageTitle text="Hi! I'm Sebastián Idrobo" />
 
   <section class="flex w-full flex-row gap-32">
     <div

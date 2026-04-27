@@ -1,12 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
 ---
 
 <Layout title="Experience" theme="amber" blobType="diamond-medium-alternates">
-  <div class="flex h-full w-full flex-col items-center justify-center">
-    <h1 class="text-6xl font-bold">Experience</h1>
-    <p class="mt-8 text-2xl">
-      This is the experience page with an amber theme!
-    </p>
-  </div>
+  <PageTitle text="Experience" />
+  <p class="mt-8 text-2xl">
+    This is the experience page with an amber theme!
+  </p>
 </Layout>
