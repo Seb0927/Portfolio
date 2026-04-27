@@ -1,0 +1,13 @@
+---
+interface Props {
+  svg: string;
+  class?: string;
+}
+
+const { svg, class: className = "" } = Astro.props;
+---
+
+<div
+  class={`size-11 fill-current text-(--theme-dark) ${className}`}
+  set:html={svg}
+/>
