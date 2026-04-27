@@ -1,0 +1,40 @@
+---
+import { Image } from "astro:assets";
+import TechIcon from "./TechIcon.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  icons: { svg: string; class?: string }[];
+  image: ImageMetadata;
+  imageAlt: string;
+  imagePosition: "left" | "right";
+}
+
+const { title, description, icons, image, imageAlt, imagePosition } = Astro.props;
+---
+
+<section class="flex w-full flex-row gap-16">
+  {imagePosition === "left" && (
+    <div class="flex min-h-full w-88 items-center justify-center rounded-4xl bg-white">
+      <Image class="max-h-28 max-w-28" src={image} alt={imageAlt} />
+    </div>
+  )}
+
+  <div class="flex flex-1 flex-col gap-4">
+    <h2 class="text-3xl font-semibold">{title}</h2>
+    <p class="text-lg">{description}</p>
+
+    <div class="flex w-full flex-row gap-8">
+      {icons.map((icon) => (
+        <TechIcon svg={icon.svg} class={icon.class} />
+      ))}
+    </div>
+  </div>
+
+  {imagePosition === "right" && (
+    <div class="flex min-h-full w-88 items-center justify-center rounded-4xl bg-white">
+      <Image class="max-h-28 max-w-28" src={image} alt={imageAlt} />
+    </div>
+  )}
+</section>
