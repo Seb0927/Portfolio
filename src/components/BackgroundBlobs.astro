@@ -19,15 +19,15 @@ const blobSvg: Record<BlobType, string> = {
 const blobs = [
   {
     position: "top-0 right-0 translate-x-1/2 -translate-y-1/2",
-    spin: "spin_20s_linear_infinite",
+    spinClass: "animate-blob-spin-20",
   },
   {
     position: "top-1/2 left-0 -translate-x-1/2 -translate-y-1/2",
-    spin: "spin_25s_linear_infinite_reverse",
+    spinClass: "animate-blob-spin-25-reverse",
   },
   {
     position: "bottom-0 right-0 translate-x-1/2 translate-y-1/2",
-    spin: "spin_22s_linear_infinite",
+    spinClass: "animate-blob-spin-22",
   },
 ];
 ---
@@ -50,7 +50,7 @@ const blobs = [
         class={`blob-wrapper pointer-events-auto absolute ${blob.position} h-64 w-64 cursor-pointer`}
       >
         <div
-          class={`h-full w-full animate-[${blob.spin}] blob-shape`}
+          class={`h-full w-full ${blob.spinClass} blob-shape`}
           style={`color: var(--theme-default)`}
           set:html={blobSvg[type]}
         />

@@ -22,6 +22,10 @@
   --color-amber-default: #d7bb98;
   --color-amber-light: #d7bb98;
   --color-amber-lightest: #fff3e3;
+
+  --animate-blob-spin-20: spin 20s linear infinite;
+  --animate-blob-spin-25-reverse: spin 25s linear infinite reverse;
+  --animate-blob-spin-22: spin 22s linear infinite;
 }
 
 [data-theme="green"] {
