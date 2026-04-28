@@ -4,7 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
 import { ChevronLeft, ChevronRight } from "@lucide/astro";
 import BackgroundBlobs from "@/components/BackgroundBlobs.astro";
-import { navLinks } from "@/constants/navigation";
+import Navbar from "@/components/Navbar.astro";
 import type { Theme, BlobType } from "@/types";
 
 interface Props {
@@ -14,8 +14,6 @@ interface Props {
 }
 
 const { title, theme, blobType } = Astro.props;
-
-const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
 
 <!doctype html>
@@ -40,50 +38,18 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
   </head>
 
   <body
-    class="relative flex min-h-screen min-w-screen flex-col items-center justify-center bg-(--theme-lightest) px-40 pb-12 pt-10 text-black"
+    class="relative flex min-h-screen min-w-screen flex-col items-center justify-center bg-(--theme-lightest) px-6 pt-10 pb-12 text-black md:px-20 lg:px-40"
     data-theme={theme}
   >
     <BackgroundBlobs type={blobType} />
 
     <ChevronLeft
       size={92}
-      class="fixed top-1/2 left-16 z-50 -translate-y-1/2 text-(--theme-darkest)"
+      class="top-1/2 z-50 hidden -translate-y-1/2 text-(--theme-darkest) md:fixed md:left-16 md:block"
       aria-hidden="true"
     />
 
-    <div class="z-10 mt-4 w-full max-w-xl">
-      <nav aria-label="Main navigation">
-        <ul class="flex flex-row justify-center">
-          {
-            navLinks.map((link) => (
-              <li class="flex-1 p-2 text-center text-lg font-medium">
-                <a href={link.path} class="block w-full">
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <div class="flex h-1.5 flex-row">
-        {
-          navLinks.map((link) => {
-            const isActive = currentPath === link.path;
-            return (
-              <div class="flex-1 bg-(--theme-default) transition-colors duration-700">
-                {isActive && (
-                  <div
-                    transition:name="nav-indicator"
-                    class="bg-(--theme-darkest) h-full w-full"
-                  />
-                )}
-              </div>
-            );
-          })
-        }
-      </div>
-    </div>
+    <Navbar />
 
     <main class="flex h-full max-w-7xl flex-1 flex-col items-center px-8 py-10">
       <slot />
@@ -91,7 +57,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
     <ChevronRight
       size={92}
-      class="fixed top-1/2 right-16 z-50 -translate-y-1/2 text-(--theme-darkest)"
+      class="top-1/2 z-50 hidden -translate-y-1/2 text-(--theme-darkest) md:fixed md:right-16 md:block"
       aria-hidden="true"
     />
   </body>
