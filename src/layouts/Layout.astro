@@ -2,7 +2,6 @@
 import "@/styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
-import { ChevronLeft, ChevronRight } from "@lucide/astro";
 import BackgroundBlobs from "@/components/BackgroundBlobs.astro";
 import Navbar from "@/components/Navbar.astro";
 import type { Theme, BlobType } from "@/types";
@@ -38,7 +37,7 @@ const { title, theme, blobType } = Astro.props;
   </head>
 
   <body
-    class="relative flex min-h-screen min-w-screen flex-col items-center justify-center bg-(--theme-lightest) px-6 pt-10 pb-12 text-black md:px-20 lg:px-40"
+    class="relative flex min-h-screen min-w-screen flex-col items-center justify-center bg-(--theme-lightest) px-6 pt-10 pb-12 text-black md:px-20 lg:px-32 xl:px-40"
     data-theme={theme}
   >
     <BackgroundBlobs type={blobType} />
