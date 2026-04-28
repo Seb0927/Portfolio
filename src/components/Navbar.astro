@@ -1,0 +1,92 @@
+---
+import { navLinks } from "@/constants/navigation";
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+const indexPath = navLinks.findIndex((link) => link.path === currentPath);
+
+let mobileLinks;
+if (indexPath <= 0) {
+  mobileLinks = navLinks.slice(0, 3);
+} else if (indexPath >= navLinks.length - 1) {
+  mobileLinks = navLinks.slice(-3);
+} else {
+  mobileLinks = navLinks.slice(indexPath - 1, indexPath + 2);
+}
+---
+
+<!-- Desktop nav: all 5 links -->
+<div class="z-10 mt-4 hidden w-full max-w-xl md:block">
+  <nav aria-label="Main navigation">
+    <ul class="flex flex-row justify-center">
+      {
+        navLinks.map((link) => (
+          <li
+            class="flex-1 p-2 text-center text-lg font-medium"
+            transition:name={`nav-desktop-${link.path}`}
+          >
+            <a href={link.path} class="block w-full">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="flex h-1.5 flex-row">
+    {
+      navLinks.map((link) => {
+        const isActive = currentPath === link.path;
+        return (
+          <div class="flex-1 bg-(--theme-default) transition-colors duration-700">
+            {isActive && (
+              <div
+                transition:name="nav-indicator-desktop"
+                class="h-full w-full bg-(--theme-darkest)"
+              />
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
+
+<!-- Mobile nav: 3 visible links with sliding window -->
+<div class="z-10 mt-4 block w-full max-w-xs md:hidden">
+  <nav aria-label="Main navigation">
+    <ul class="flex flex-row justify-center">
+      {
+        mobileLinks.map((link) => (
+          <li
+            class="flex-1 p-2 text-center text-lg font-medium"
+            transition:name={`nav-mobile-${link.path}`}
+          >
+            <a href={link.path} class="block w-full">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="flex h-1.5 flex-row">
+    {
+      mobileLinks.map((link) => {
+        const isActive = currentPath === link.path;
+        return (
+          <div class="flex-1 bg-(--theme-default) transition-colors duration-700">
+            {isActive && (
+              <div
+                transition:name="nav-indicator-mobile"
+                class="h-full w-full bg-(--theme-darkest)"
+              />
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
