@@ -43,22 +43,10 @@ const { title, theme, blobType } = Astro.props;
   >
     <BackgroundBlobs type={blobType} />
 
-    <ChevronLeft
-      size={92}
-      class="top-1/2 z-50 hidden -translate-y-1/2 text-(--theme-darkest) md:fixed md:left-16 md:block"
-      aria-hidden="true"
-    />
-
     <Navbar />
 
     <main class="flex h-full max-w-7xl flex-1 flex-col items-center px-8 py-10">
       <slot />
     </main>
-
-    <ChevronRight
-      size={92}
-      class="top-1/2 z-50 hidden -translate-y-1/2 text-(--theme-darkest) md:fixed md:right-16 md:block"
-      aria-hidden="true"
-    />
   </body>
 </html>
