@@ -11,7 +11,9 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
 <Layout title="Home" theme="green" blobType="rounded-star">
   <PageTitle text="Hi! I'm Sebastián Idrobo" />
 
-  <section class="flex w-full flex-col gap-8 md:flex-row md:gap-32">
+  <section
+    class="flex w-full flex-col gap-8 md:flex-row md:gap-12 lg:gap-16 xl:gap-32"
+  >
     <div
       class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
     >
@@ -30,7 +32,7 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
       </ul>
     </div>
 
-    <div class="flex flex-1 justify-center">
+    <div class="flex flex-1 justify-center md:min-w-64 lg:min-w-80 xl:min-w-96">
       <Image
         src={meImg}
         alt="Sebastián Idrobo portrait"
@@ -39,12 +41,14 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
     </div>
   </section>
 
-  <section class="mt-12">
-    <h2 class="col-span-2 mb-4 text-center text-4xl font-semibold md:py-8">
-      About myself
-    </h2>
-    <div class="flex w-full flex-col gap-8 md:flex-row md:gap-32">
-      <div class="flex flex-1 justify-center">
+  <section class="mt-16">
+    <h2 class="mb-8 text-center text-4xl font-semibold">About myself</h2>
+    <div
+      class="mb-12 md:mb-24 flex w-full flex-col gap-8 md:flex-row md:gap-12 lg:gap-16 xl:gap-32"
+    >
+      <div
+        class="flex flex-1 justify-center md:min-w-64 lg:min-w-80 xl:min-w-96"
+      >
         <Image
           src={ciatImg}
           alt="CIAT workplace"
@@ -85,9 +89,7 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
     </div>
   </section>
 
-  <section
-    class="mt-24 flex w-full flex-row items-center justify-between md:w-7/10"
-  >
+  <section class="flex w-full flex-row items-center justify-between md:w-7/10">
     <TechIcon svg={siPython.svg} />
     <TechIcon svg={siJavascript.svg} />
     <TechIcon svg={siReact.svg} />
