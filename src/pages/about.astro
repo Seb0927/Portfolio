@@ -11,7 +11,7 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
 <Layout title="Home" theme="green" blobType="rounded-star">
   <PageTitle text="Hi! I'm Sebastián Idrobo" />
 
-  <section class="flex w-full flex-row gap-32">
+  <section class="flex w-full flex-col md:flex-row gap-8 md:gap-32">
     <div
       class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
     >
@@ -43,7 +43,7 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
     <h2 class="col-span-2 mb-4 text-center text-4xl font-semibold md:py-8">
       About myself
     </h2>
-    <div class="flex w-full flex-row gap-32">
+    <div class="flex w-full flex-col md:flex-row gap-8 md:gap-32">
       <div class="flex flex-1 justify-center">
         <Image
           src={ciatImg}
@@ -85,7 +85,7 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
     </div>
   </section>
 
-  <section class="mt-24 flex w-7/10 flex-row items-center justify-between">
+  <section class="mt-24 flex w-full md:w-7/10 flex-row items-center justify-between">
     <TechIcon svg={siPython.svg} />
     <TechIcon svg={siJavascript.svg} />
     <TechIcon svg={siReact.svg} />
