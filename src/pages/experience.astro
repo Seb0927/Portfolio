@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
+import ExperienceCard from "@/components/ExperienceCard.astro";
 import line from "@/assets/vectors/line.svg?raw";
 import curve from "@/assets/vectors/curve.svg?raw";
-import pin from "@/assets/vectors/pin.svg?raw";
 ---
 
 <Layout title="Experience" theme="amber" blobType="diamond-medium-alternates">
@@ -14,14 +14,14 @@ import pin from "@/assets/vectors/pin.svg?raw";
 
   <!-- Left side -->
   <div class="absolute top-0 left-1/5 w-0">
-    <!-- Vertical line -->
+    <!-- Top vertical line -->
     <div
       class="w-px"
       aria-hidden="true"
       style={`color: var(--theme-darkest)`}
       set:html={line}
     />
-    <!-- Vertical line -->
+    <!-- Bottom vertical line -->
     <div
       class="w-px"
       aria-hidden="true"
@@ -47,65 +47,27 @@ import pin from "@/assets/vectors/pin.svg?raw";
           aria-hidden="true"
         >
         </div>
-        <li class="relative flex h-140 flex-1 flex-col items-center">
-          <div class="mb-16 flex flex-1 flex-col gap-4">
-            <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-              Panamerican Games Volunteer
-            </h2>
-            <p class="flex h-30 items-center overflow-auto">
-              I facilitated effective communication between English-speaking
-              individuals and the teams responsible for organizing the games.
-            </p>
-            <time class="text-center text-xl font-bold" datetime="2023">2023</time>
-          </div>
-          <div
-            class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
-            aria-hidden="true"
-          >
-            <div style="color: var(--theme-darkest)" set:html={pin} />
-          </div>
-          <div class="flex-1"></div>
-        </li>
-
-        <li class="relative flex h-140 flex-1 flex-col items-center">
-          <div class="flex-1"></div>
-          <div class="mt-20 flex flex-1 flex-col gap-4">
-            <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-              Academic Assistant
-            </h2>
-            <p class="flex h-30 items-center overflow-auto">
-              I provided socio-educational support to first-semester students to
-              offer academic assistance in programming courses.
-            </p>
-            <time class="text-center text-xl font-bold" datetime="2024">2024</time>
-          </div>
-          <div
-            class="absolute top-[calc(50%+10px)] flex -translate-y-1/2 rotate-180 items-center justify-center"
-            aria-hidden="true"
-          >
-            <div style="color: var(--theme-darkest)" set:html={pin} />
-          </div>
-        </li>
-
-        <li class="relative flex h-140 flex-1 flex-col items-center">
-          <div class="mb-16 flex flex-1 flex-col gap-4">
-            <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-              Technical Support Monitor
-            </h2>
-            <p class="flex h-30 items-center overflow-auto">
-              I provided technical support for audiovisual and computer
-              equipment in classrooms and labs at Universidad del Valle
-            </p>
-            <time class="text-center text-xl font-bold" datetime="2024">2024</time>
-          </div>
-          <div
-            class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
-            aria-hidden="true"
-          >
-            <div style="color: var(--theme-darkest)" set:html={pin} />
-          </div>
-          <div class="flex-1"></div>
-        </li>
+        <ExperienceCard
+          role="Panamerican Games Volunteer"
+          description="I facilitated effective communication between English-speaking individuals and the teams responsible for organizing the games."
+          year="2023"
+          contentPosition="top"
+          pinDirection="up"
+        />
+        <ExperienceCard
+          role="Academic Assistant"
+          description="I provided socio-educational support to first-semester students to offer academic assistance in programming courses."
+          year="2024"
+          contentPosition="bottom"
+          pinDirection="down"
+        />
+        <ExperienceCard
+          role="Technical Support Monitor"
+          description="I provided technical support for audiovisual and computer equipment in classrooms and labs at Universidad del Valle"
+          year="2024"
+          contentPosition="top"
+          pinDirection="up"
+        />
       </ol>
       <div class="flex translate-y-[79px] flex-col">
         <!-- Curve -->
@@ -160,46 +122,21 @@ import pin from "@/assets/vectors/pin.svg?raw";
             aria-hidden="true"
           >
           </div>
-          <li class="relative flex h-140 flex-1 flex-col items-center">
-            <div class="mb-16 flex flex-1 flex-col gap-4">
-              <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-                Software Developer Intern
-              </h2>
-              <p class="flex h-30 items-center overflow-auto">
-                I built an interactive web application for dynamic visualization
-                of key indicators, and support ETL processes that gathered data
-              </p>
-              <time class="text-center text-xl font-bold" datetime="2025">2025</time>
-            </div>
-            <div
-              class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
-              aria-hidden="true"
-            >
-              <div style="color: var(--theme-darkest)" set:html={pin} />
-            </div>
-            <div class="flex-1"></div>
-          </li>
-
-          <li class="relative flex h-140 flex-1 flex-col items-center">
-            <div class="flex-1"></div>
-            <div class="mt-16 flex flex-1 flex-col gap-4">
-              <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-                Implementation Consultant
-              </h2>
-              <p class="flex h-30 items-center overflow-auto">
-                I led the onboarding lifecycle through timelines, effective
-                customer transitions toward optimal product adoption.
-              </p>
-              <time class="text-center text-xl font-bold" datetime="2025">Today</time>
-            </div>
-            <div
-              class="absolute top-[calc(50%+10px)] flex -translate-y-1/2 rotate-180 items-center justify-center"
-              aria-hidden="true"
-            >
-              <div style="color: var(--theme-darkest)" set:html={pin} />
-            </div>
-          </li>
-
+          <ExperienceCard
+            role="Software Developer Intern"
+            description="I built an interactive web application for dynamic visualization of key indicators, and support ETL processes that gathered data"
+            year="2025"
+            contentPosition="top"
+            pinDirection="up"
+          />
+          <ExperienceCard
+            role="Implementation Consultant"
+            description="I led the onboarding lifecycle through timelines, effective customer transitions toward optimal product adoption."
+            year="2025"
+            yearLabel="Today"
+            contentPosition="bottom"
+            pinDirection="down"
+          />
           <li class="relative flex h-140 flex-1 flex-col items-center" aria-hidden="true"></li>
         </ol>
 

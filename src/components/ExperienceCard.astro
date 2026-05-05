@@ -1,0 +1,51 @@
+---
+interface Props {
+  role: string;
+  description: string;
+  year: string;
+  yearLabel?: string;
+  contentPosition: "top" | "bottom";
+  pinDirection?: "up" | "down";
+}
+
+import pin from "@/assets/vectors/pin.svg?raw";
+
+const { role, description, year, yearLabel = year, contentPosition, pinDirection = "up" } = Astro.props;
+---
+
+<li class="relative flex h-140 flex-1 flex-col items-center">
+  {contentPosition === "top" ? (
+    <div class="mb-16 flex flex-1 flex-col gap-4">
+      <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+        {role}
+      </h2>
+      <p class="flex h-30 items-center overflow-auto">
+        {description}
+      </p>
+      <time class="text-center text-xl font-bold" datetime={year}>{yearLabel}</time>
+    </div>
+  ) : (
+    <>
+      <div class="flex-1"></div>
+      <div class={contentPosition === "bottom" ? "mt-20 flex flex-1 flex-col gap-4" : "mt-16 flex flex-1 flex-col gap-4"}>
+        <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+          {role}
+        </h2>
+        <p class="flex h-30 items-center overflow-auto">
+          {description}
+        </p>
+        <time class="text-center text-xl font-bold" datetime={year}>{yearLabel}</time>
+      </div>
+    </>
+  )}
+  <div
+    class:list={[
+      "absolute flex -translate-y-1/2 items-center justify-center",
+      pinDirection === "down" ? "top-[calc(50%+10px)] rotate-180" : "top-[calc(50%-8px)]",
+    ]}
+    aria-hidden="true"
+  >
+    <div style="color: var(--theme-darkest)" set:html={pin} />
+  </div>
+  {contentPosition === "top" && <div class="flex-1"></div>}
+</li>
