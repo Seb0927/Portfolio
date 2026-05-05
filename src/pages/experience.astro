@@ -15,15 +15,26 @@ import pin from "@/assets/vectors/pin.svg?raw";
   <!-- Left side -->
   <div class="absolute top-0 left-1/5 w-0">
     <!-- Vertical line -->
-    <div class="w-px" style={`color: var(--theme-darkest)`} set:html={line} />
+    <div
+      class="w-px"
+      aria-hidden="true"
+      style={`color: var(--theme-darkest)`}
+      set:html={line}
+    />
     <!-- Vertical line -->
-    <div class="w-px" style={`color: var(--theme-darkest)`} set:html={line} />
+    <div
+      class="w-px"
+      aria-hidden="true"
+      style={`color: var(--theme-darkest)`}
+      set:html={line}
+    />
 
     <!-- First Content -->
     <div class="relative flex w-[60vw] flex-row">
       <!-- Curve -->
       <div
         class="self-start"
+        aria-hidden="true"
         style={`color: var(--theme-darkest)`}
         set:html={curve}
       />
@@ -37,7 +48,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
         </div>
         <div class="relative flex h-140 flex-1 flex-col items-center">
           <div class="mb-16 flex flex-1 flex-col gap-4">
-            <h2 class="max-h-16 overflow-auto text-center text-2xl font-bold">
+            <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
               Panamerican Games Volunteer
             </h2>
             <p class="flex h-30 items-center overflow-auto">
@@ -48,6 +59,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
           </div>
           <div
             class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
+            aria-hidden="true"
           >
             <div style="color: var(--theme-darkest)" set:html={pin} />
           </div>
@@ -57,7 +69,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
         <div class="relative flex h-140 flex-1 flex-col items-center">
           <div class="flex-1"></div>
           <div class="mt-20 flex flex-1 flex-col gap-4">
-            <h2 class="max-h-16 overflow-auto text-center text-2xl font-bold">
+            <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
               Academic Assistant
             </h2>
             <p class="flex h-30 items-center overflow-auto">
@@ -68,6 +80,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
           </div>
           <div
             class="absolute top-[calc(50%+10px)] flex -translate-y-1/2 rotate-180 items-center justify-center"
+            aria-hidden="true"
           >
             <div style="color: var(--theme-darkest)" set:html={pin} />
           </div>
@@ -75,7 +88,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
 
         <div class="relative flex h-140 flex-1 flex-col items-center">
           <div class="mb-16 flex flex-1 flex-col gap-4">
-            <h2 class="max-h-16 overflow-auto text-center text-2xl font-bold">
+            <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
               Technical Support Monitor
             </h2>
             <p class="flex h-30 items-center overflow-auto">
@@ -86,6 +99,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
           </div>
           <div
             class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
+            aria-hidden="true"
           >
             <div style="color: var(--theme-darkest)" set:html={pin} />
           </div>
@@ -96,12 +110,14 @@ import pin from "@/assets/vectors/pin.svg?raw";
         <!-- Curve -->
         <div
           class="rotate-180 self-start"
+          aria-hidden="true"
           style={`color: var(--theme-darkest)`}
           set:html={curve}
         />
         <!-- Vertical line -->
         <div
           class="w-px self-end"
+          aria-hidden="true"
           style={`color: var(--theme-darkest)`}
           set:html={line}
         />
@@ -116,6 +132,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
       <!-- Vertical line -->
       <div
         class="w-px self-end"
+        aria-hidden="true"
         style={`color: var(--theme-darkest)`}
         set:html={line}
       />
@@ -128,6 +145,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
         <!-- Curve -->
         <div
           class="rotate-270 self-start"
+          aria-hidden="true"
           style={`color: var(--theme-darkest)`}
           set:html={curve}
         />
@@ -142,7 +160,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
           </div>
           <div class="relative flex h-140 flex-1 flex-col items-center">
             <div class="mb-16 flex flex-1 flex-col gap-4">
-              <h2 class="max-h-16 overflow-auto text-center text-2xl font-bold">
+              <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
                 Software Developer Intern
               </h2>
               <p class="flex h-30 items-center overflow-auto">
@@ -153,6 +171,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
             </div>
             <div
               class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
+              aria-hidden="true"
             >
               <div style="color: var(--theme-darkest)" set:html={pin} />
             </div>
@@ -162,7 +181,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
           <div class="relative flex h-140 flex-1 flex-col items-center">
             <div class="flex-1"></div>
             <div class="mt-16 flex flex-1 flex-col gap-4">
-              <h2 class="max-h-16 overflow-auto text-center text-2xl font-bold">
+              <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
                 Implementation Consultant
               </h2>
               <p class="flex h-30 items-center overflow-auto">
@@ -173,6 +192,7 @@ import pin from "@/assets/vectors/pin.svg?raw";
             </div>
             <div
               class="absolute top-[calc(50%+10px)] flex -translate-y-1/2 rotate-180 items-center justify-center"
+              aria-hidden="true"
             >
               <div style="color: var(--theme-darkest)" set:html={pin} />
             </div>
@@ -186,11 +206,13 @@ import pin from "@/assets/vectors/pin.svg?raw";
           <!-- Curve -->
           <div
             class="rotate-90 self-start"
+            aria-hidden="true"
             style={`color: var(--theme-darkest)`}
             set:html={curve}
           />
           <!-- Vertical line -->
           <div
+            aria-hidden="true"
             style={`color: var(--theme-darkest)`}
             set:html={line}
           />
