@@ -39,14 +39,15 @@ import pin from "@/assets/vectors/pin.svg?raw";
         set:html={curve}
       />
       <!-- Content containers -->
-      <div
-        class="flex w-[calc(100%-160px)] -translate-y-[calc(50%-79px)] flex-row items-center gap-x-16"
+      <ol
+        class="flex list-none w-[calc(100%-160px)] -translate-y-[calc(50%-79px)] flex-row items-center gap-x-16 p-0"
       >
         <div
           class="absolute top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"
+          aria-hidden="true"
         >
         </div>
-        <div class="relative flex h-140 flex-1 flex-col items-center">
+        <li class="relative flex h-140 flex-1 flex-col items-center">
           <div class="mb-16 flex flex-1 flex-col gap-4">
             <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
               Panamerican Games Volunteer
@@ -64,9 +65,9 @@ import pin from "@/assets/vectors/pin.svg?raw";
             <div style="color: var(--theme-darkest)" set:html={pin} />
           </div>
           <div class="flex-1"></div>
-        </div>
+        </li>
 
-        <div class="relative flex h-140 flex-1 flex-col items-center">
+        <li class="relative flex h-140 flex-1 flex-col items-center">
           <div class="flex-1"></div>
           <div class="mt-20 flex flex-1 flex-col gap-4">
             <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
@@ -84,9 +85,9 @@ import pin from "@/assets/vectors/pin.svg?raw";
           >
             <div style="color: var(--theme-darkest)" set:html={pin} />
           </div>
-        </div>
+        </li>
 
-        <div class="relative flex h-140 flex-1 flex-col items-center">
+        <li class="relative flex h-140 flex-1 flex-col items-center">
           <div class="mb-16 flex flex-1 flex-col gap-4">
             <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
               Technical Support Monitor
@@ -104,8 +105,8 @@ import pin from "@/assets/vectors/pin.svg?raw";
             <div style="color: var(--theme-darkest)" set:html={pin} />
           </div>
           <div class="flex-1"></div>
-        </div>
-      </div>
+        </li>
+      </ol>
       <div class="flex translate-y-[79px] flex-col">
         <!-- Curve -->
         <div
@@ -151,14 +152,15 @@ import pin from "@/assets/vectors/pin.svg?raw";
         />
 
         <!-- Content containers -->
-        <div
-          class="flex w-[calc(100%-160px)] -translate-y-[calc(50%-79px)] flex-row-reverse items-center gap-x-16"
+        <ol
+          class="flex list-none w-[calc(100%-160px)] -translate-y-[calc(50%-79px)] flex-row-reverse items-center gap-x-16 p-0"
         >
           <div
             class="absolute top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"
+            aria-hidden="true"
           >
           </div>
-          <div class="relative flex h-140 flex-1 flex-col items-center">
+          <li class="relative flex h-140 flex-1 flex-col items-center">
             <div class="mb-16 flex flex-1 flex-col gap-4">
               <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
                 Software Developer Intern
@@ -176,9 +178,9 @@ import pin from "@/assets/vectors/pin.svg?raw";
               <div style="color: var(--theme-darkest)" set:html={pin} />
             </div>
             <div class="flex-1"></div>
-          </div>
+          </li>
 
-          <div class="relative flex h-140 flex-1 flex-col items-center">
+          <li class="relative flex h-140 flex-1 flex-col items-center">
             <div class="flex-1"></div>
             <div class="mt-16 flex flex-1 flex-col gap-4">
               <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
@@ -196,10 +198,10 @@ import pin from "@/assets/vectors/pin.svg?raw";
             >
               <div style="color: var(--theme-darkest)" set:html={pin} />
             </div>
-          </div>
+          </li>
 
-          <div class="relative flex h-140 flex-1 flex-col items-center"></div>
-        </div>
+          <li class="relative flex h-140 flex-1 flex-col items-center" aria-hidden="true"></li>
+        </ol>
 
         <!-- Left side -->
         <div class="absolute top-0 left-0 flex translate-y-[79px] flex-col">
