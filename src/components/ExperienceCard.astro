@@ -6,14 +6,15 @@ interface Props {
   yearLabel?: string;
   contentPosition: "top" | "bottom";
   pinDirection?: "up" | "down";
+  displayClass?: string;
 }
 
 import pin from "@/assets/vectors/pin.svg?raw";
 
-const { role, description, year, yearLabel = year, contentPosition, pinDirection = "up" } = Astro.props;
+const { role, description, year, yearLabel = year, contentPosition, pinDirection = "up", displayClass = "flex" } = Astro.props;
 ---
 
-<li class="relative flex h-140 flex-1 flex-col items-center">
+<li class:list={["relative h-140 flex-1 flex-col items-center", displayClass]}>
   {contentPosition === "top" ? (
     <div class="mb-16 flex flex-1 flex-col gap-4">
       <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
