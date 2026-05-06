@@ -10,10 +10,10 @@ import curve from "@/assets/vectors/curve.svg?raw";
   <PageTitle text="Experience" />
 
   <!-- Spacer element to force <main> to stretch -->
-  <div class="md:h-458 xl:h-294 w-full"></div>
+  <div class="md:h-458 2xl:h-294 w-full"></div>
 
   <!-- Left side -->
-  <div class="absolute top-0 left-1/5 w-0">
+  <div class="absolute top-0 xl:left-1/5 md:left-1/12 w-0">
     <!-- Top vertical line -->
     <div
       class="w-px"
@@ -30,7 +30,7 @@ import curve from "@/assets/vectors/curve.svg?raw";
     />
 
     <!-- Row 1: left-to-right -->
-    <div class="relative flex w-[60vw] flex-row">
+    <div class="relative flex xl:w-[60vw] md:w-[83.3vw] flex-row">
       <!-- Curve -->
       <div
         class="self-start"
@@ -172,7 +172,7 @@ import curve from "@/assets/vectors/curve.svg?raw";
 
   <!-- Right side (below 2xl: 2 cards per row) -->
   <div
-    class="absolute left-4/5 flex flex-col 2xl:hidden"
+    class="absolute xl:left-4/5 md:left-11/12 flex flex-col 2xl:hidden"
     style="top: calc(492px + 404px)"
   >
     <!-- Initial -->
@@ -185,7 +185,7 @@ import curve from "@/assets/vectors/curve.svg?raw";
         set:html={line}
       />
       <!-- Row 2: right-to-left (2 cards) -->
-      <div class="relative flex h-0 w-[60vw] flex-row-reverse">
+      <div class="relative flex h-0 xl:w-[60vw] md:w-[83.3vw] flex-row-reverse">
         <!-- Curve -->
         <div
           class="rotate-270 self-start"
@@ -241,7 +241,7 @@ import curve from "@/assets/vectors/curve.svg?raw";
 
   <!-- Row 3 (below 2xl only: left-to-right) -->
   <div
-    class="absolute left-1/5 w-0 2xl:hidden"
+    class="absolute xl:left-1/5 md:left-1/12 w-0 2xl:hidden"
     style="top: calc(492px + 404px + 492px + 159px)"
   >
     <!-- Vertical line -->
@@ -252,7 +252,7 @@ import curve from "@/assets/vectors/curve.svg?raw";
       set:html={line}
     />
 
-    <div class="relative flex h-0 w-[60vw] flex-row">
+    <div class="relative flex h-0 xl:w-[60vw] md:w-[83.3vw] flex-row">
       <!-- Curve -->
       <div
         class="self-start"
