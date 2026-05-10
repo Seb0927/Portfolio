@@ -4,3 +4,5 @@ export type BlobType =
   | "rounded-star"
   | "circle-pentagon"
   | "diamond-medium-alternates";
+
+export type CardPosition = "top" | "bottom";

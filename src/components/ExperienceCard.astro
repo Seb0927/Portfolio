@@ -1,52 +1,91 @@
 ---
+import type { CardPosition } from "@/types";
+import pinSvg from "@/assets/vectors/pin.svg?raw";
+import line from "@/assets/vectors/line.svg?raw";
+import curve from "@/assets/vectors/curve.svg?raw";
+
 interface Props {
-  role: string;
+  title: string;
   description: string;
-  year: string;
-  yearLabel?: string;
-  contentPosition: "top" | "bottom";
-  pinDirection?: "up" | "down";
-  displayClass?: string;
+  date: string;
+  position: CardPosition;
+  orderSm: number;
+  orderMd: number;
+  orderXl: number;
 }
 
-import pin from "@/assets/vectors/pin.svg?raw";
+const { title, description, date, position, orderSm, orderMd, orderXl } =
+  Astro.props;
 
-const { role, description, year, yearLabel = year, contentPosition, pinDirection = "up", displayClass = "flex" } = Astro.props;
+const isTop = position === "top";
 ---
 
-<li class:list={["relative h-140 flex-1 flex-col items-center", displayClass]}>
-  {contentPosition === "top" ? (
-    <div class="mb-16 flex flex-1 flex-col gap-4">
-      <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-        {role}
-      </h2>
-      <p class="flex h-30 items-center overflow-auto">
-        {description}
-      </p>
-      <time class="text-center text-xl font-bold" datetime={year}>{yearLabel}</time>
-    </div>
-  ) : (
-    <>
-      <div class="flex-1"></div>
-      <div class={contentPosition === "bottom" ? "mt-20 flex flex-1 flex-col gap-4" : "mt-16 flex flex-1 flex-col gap-4"}>
-        <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-          {role}
-        </h2>
-        <p class="flex h-30 items-center overflow-auto">
-          {description}
-        </p>
-        <time class="text-center text-xl font-bold" datetime={year}>{yearLabel}</time>
-      </div>
-    </>
-  )}
+<li
+  class="experience-card relative flex h-140 flex-1 flex-col items-center"
+  style={`--order-sm: ${orderSm}; --order-md: ${orderMd}; --order-xl: ${orderXl};`}
+>
   <div
-    class:list={[
-      "absolute flex -translate-y-1/2 items-center justify-center",
-      pinDirection === "down" ? "top-[calc(50%+10px)] rotate-180" : "top-[calc(50%-8px)]",
-    ]}
+    class="absolute top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"
     aria-hidden="true"
   >
-    <div style="color: var(--theme-darkest)" set:html={pin} />
   </div>
-  {contentPosition === "top" && <div class="flex-1"></div>}
+  {
+    isTop ? (
+      <>
+        <div class="mb-16 flex flex-1 flex-col gap-4">
+          <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+            {title}
+          </h2>
+          <p class="flex h-30 items-center overflow-auto">{description}</p>
+          <time class="text-center text-xl font-bold" datetime={date}>
+            {date}
+          </time>
+        </div>
+        <div
+          class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
+          aria-hidden="true"
+        >
+          <div style="color: var(--theme-darkest)" set:html={pinSvg} />
+        </div>
+        <div class="flex-1" />
+      </>
+    ) : (
+      <>
+        <div class="flex-1" />
+        <div
+          class="absolute top-[calc(50%+10px)] flex -translate-y-1/2 rotate-180 items-center justify-center"
+          aria-hidden="true"
+        >
+          <div style="color: var(--theme-darkest)" set:html={pinSvg} />
+        </div>
+        <div class="mt-20 flex flex-1 flex-col gap-4">
+          <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+            {title}
+          </h2>
+          <p class="flex h-30 items-center overflow-auto">{description}</p>
+          <time class="text-center text-xl font-bold" datetime={date}>
+            {date}
+          </time>
+        </div>
+      </>
+    )
+  }
 </li>
+
+<style>
+  .experience-card {
+    order: var(--order-sm);
+  }
+
+  @media (min-width: 768px) {
+    .experience-card {
+      order: var(--order-md);
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .experience-card {
+      order: var(--order-xl);
+    }
+  }
+</style>
