@@ -6,3 +6,5 @@ export type BlobType =
   | "diamond-medium-alternates";
 
 export type CardPosition = "top" | "bottom";
+
+export type PathType = "top-left" | "top-right" | "bottom-left" | "bottom-right";

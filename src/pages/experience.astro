@@ -2,13 +2,22 @@
 import Layout from "../layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
 import ExperienceCard from "@/components/ExperienceCard.astro";
-import line from "@/assets/vectors/line.svg?raw";
-import curve from "@/assets/vectors/curve.svg?raw";
+import ExperiencePath from "@/components/ExperiencePath.astro";
+import type { PathType } from "@/types";
 
 interface Experience {
   title: string;
   description: string;
   date: string;
+}
+
+interface PathConnector {
+  type: PathType;
+  orderSm: number;
+  orderMd: number;
+  orderXl: number;
+  hiddenMd?: boolean;
+  hiddenXl?: boolean;
 }
 
 const experiences: Experience[] = [
@@ -44,22 +53,78 @@ const experiences: Experience[] = [
   },
 ];
 
-function snakeOrder(index: number, cols: number): number {
-  const row = Math.floor(index / cols);
-  const posInRow = index % cols;
+function lineOrder(index: number, cols: number): number {
+  const step = cols + 2;
+  const row = Math.floor(index / 2);
+  const side = index % 2;
+
   if (row % 2 === 0) {
-    return row * cols + posInRow + 1;
+    return row * step + (side === 0 ? 1 : step);
   }
-  return row * cols + cols - posInRow;
+
+  return row * step + (side === 0 ? step : 1);
 }
+
+function cardOrder(index: number, cols: number): number {
+  const step = cols + 2;
+  const row = Math.floor(index / cols);
+  const col = index % cols;
+
+  const start = 2 + row * step;
+
+  if (row % 2 === 0) {
+    return start + col;
+  }
+
+  return start + (cols - 1 - col);
+}
+
+function generateConnectors(total: number): PathConnector[] {
+  const mdCols = 2;
+  const xlCols = 3;
+  const mdRows = Math.ceil(total / mdCols);
+  const xlRows = Math.ceil(total / xlCols);
+
+  return Array.from({ length: total * 2 }, (_, i) => {
+    const pairIndex = Math.floor(i / 2);
+    const side = i % 2;
+    const evenRow = pairIndex % 2 === 0;
+
+    const type: PathType = evenRow
+      ? side === 0 ? "top-left" : "bottom-right"
+      : side === 0 ? "bottom-left" : "top-right";
+
+    return {
+      type,
+      orderSm: lineOrder(i, 1),
+      orderMd: lineOrder(i, mdCols),
+      orderXl: lineOrder(i, xlCols),
+      ...(pairIndex >= mdRows ? { hiddenMd: true } : {}),
+      ...(pairIndex >= xlRows ? { hiddenXl: true } : {}),
+    };
+  });
+}
+
+const connectors = generateConnectors(experiences.length);
 ---
 
 <Layout title="Experience" theme="amber" blobType="diamond-medium-alternates">
   <PageTitle text="Experience" />
 
   <div
-    class="grid h-full w-full grid-cols-1 gap-y-32 md:grid-cols-2 2xl:grid-cols-3"
+    class="grid h-full w-full grid-cols-[80px_1fr_80px] md:grid-cols-[80px_1fr_1fr_80px] 2xl:grid-cols-[80px_1fr_1fr_1fr_80px]"
   >
+    {connectors.map((c) => (
+      <ExperiencePath
+        type={c.type}
+        orderSm={c.orderSm}
+        orderMd={c.orderMd}
+        orderXl={c.orderXl}
+        hiddenMd={c.hiddenMd}
+        hiddenXl={c.hiddenXl}
+      />
+    ))}
+
     {
       experiences.map((exp, i) => (
         <ExperienceCard
@@ -67,16 +132,16 @@ function snakeOrder(index: number, cols: number): number {
           description={exp.description}
           date={exp.date}
           position={i % 2 === 0 ? "top" : "bottom"}
-          orderSm={i + 1}
-          orderMd={snakeOrder(i, 2)}
-          orderXl={snakeOrder(i, 3)}
+          orderSm={cardOrder(i, 1)}
+          orderMd={cardOrder(i, 2)}
+          orderXl={cardOrder(i, 3)}
         />
       ))
     }
 
     <!-- Emtpy element for filling gaps -->
     <li
-      class="experience-card hidden md:order-6 relative order-6 md:flex h-140 flex-1 flex-col items-center 2xl:order-4"
+      class="experience-card relative order-6 hidden h-140 flex-1 flex-col items-center md:order-11 md:block 2xl:order-7 2xl:block"
     >
       <div
         class="absolute top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"

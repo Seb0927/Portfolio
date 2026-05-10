@@ -1,0 +1,89 @@
+---
+import type { PathType } from "@/types";
+import line from "@/assets/vectors/line.svg?raw";
+import curve from "@/assets/vectors/curve.svg?raw";
+
+interface Props {
+  type: PathType;
+  orderSm: number;
+  orderMd: number;
+  orderXl: number;
+  hiddenMd?: boolean;
+  hiddenXl?: boolean;
+}
+
+const { type, orderSm, orderMd, orderXl, hiddenMd = false, hiddenXl = false } = Astro.props;
+
+const pathConfigs: Record<
+  PathType,
+  { segments: { svg: "line" | "curve"; rotation: number }[]; hasTranslate: boolean }
+> = {
+  "top-left": {
+    segments: [
+      { svg: "line", rotation: 0 },
+      { svg: "curve", rotation: 0 },
+    ],
+    hasTranslate: false,
+  },
+  "bottom-right": {
+    segments: [
+      { svg: "curve", rotation: 180 },
+      { svg: "line", rotation: 180 },
+    ],
+    hasTranslate: true,
+  },
+  "bottom-left": {
+    segments: [
+      { svg: "line", rotation: 180 },
+      { svg: "curve", rotation: 270 },
+    ],
+    hasTranslate: false,
+  },
+  "top-right": {
+    segments: [
+      { svg: "curve", rotation: 90 },
+      { svg: "line", rotation: 0 },
+    ],
+    hasTranslate: true,
+  },
+};
+
+const config = pathConfigs[type];
+const svgs: Record<string, string> = { line, curve };
+---
+
+<div
+  class:list={[
+    "experience-path h-min max-w-20",
+    { "translate-y-[calc(100%-1px)]": config.hasTranslate },
+    { "md:hidden": hiddenMd },
+    { "2xl:hidden": hiddenXl },
+  ]}
+  style={`--order-sm: ${orderSm}; --order-md: ${orderMd}; --order-xl: ${orderXl};`}
+  aria-hidden="true"
+>
+  {config.segments.map(({ svg, rotation }) => (
+    <div
+      style={`transform: rotate(${rotation}deg); color: var(--theme-darkest);`}
+      set:html={svgs[svg]}
+    />
+  ))}
+</div>
+
+<style>
+  .experience-path {
+    order: var(--order-sm);
+  }
+
+  @media (min-width: 768px) {
+    .experience-path {
+      order: var(--order-md);
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .experience-path {
+      order: var(--order-xl);
+    }
+  }
+</style>
