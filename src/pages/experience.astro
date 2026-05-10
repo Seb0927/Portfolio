@@ -53,6 +53,20 @@ const experiences: Experience[] = [
   },
 ];
 
+/**
+ * Computes the CSS grid order for a timeline path connector at a given
+ * linear index within a grid that has `cols` card columns.
+ *
+ * The grid uses `cols + 2` columns (1 left-path column per card column
+ * + 1 right-path column), giving a step of `cols + 2` per row.
+ * Connectors alternate sides: even indices are left (odd-order cols),
+ * odd indices are right (even-order cols). Even rows flow left→right,
+ * odd rows flow right→left (snake pattern).
+ *
+ * @param index - Linear connector index (0-based, left side first)
+ * @param cols  - Number of card columns at this breakpoint (1, 2, or 3)
+ * @returns The CSS `order` value for this connector
+ */
 function lineOrder(index: number, cols: number): number {
   const step = cols + 2;
   const row = Math.floor(index / 2);
@@ -65,6 +79,18 @@ function lineOrder(index: number, cols: number): number {
   return row * step + (side === 0 ? step : 1);
 }
 
+/**
+ * Computes the CSS grid order for an experience card at a given index
+ * within a grid that has `cols` card columns.
+ *
+ * Cards start at order position 2 (after the left-path column) and
+ * follow a snake pattern: even rows flow left→right, odd rows flow
+ * right→left.
+ *
+ * @param index - Card index in the experiences array (0-based)
+ * @param cols  - Number of card columns at this breakpoint (1, 2, or 3)
+ * @returns The CSS `order` value for this card
+ */
 function cardOrder(index: number, cols: number): number {
   const step = cols + 2;
   const row = Math.floor(index / cols);
@@ -79,6 +105,21 @@ function cardOrder(index: number, cols: number): number {
   return start + (cols - 1 - col);
 }
 
+/**
+ * Generates the full set of timeline path connectors for `total` cards.
+ *
+ * Each card requires 2 connectors (left + right side), so this produces
+ * `total * 2` connectors. Connector types follow the snake pattern:
+ *   - Even rows: left→"top-left", right→"bottom-right"
+ *   - Odd rows:  left→"bottom-left", right→"top-right"
+ *
+ * Connectors beyond what a breakpoint's grid rows can fill are marked
+ * hidden at that breakpoint (e.g., 5 cards × 3 cols = 2 full rows,
+ * so pairs 2+ are `hiddenXl`).
+ *
+ * @param total - Number of experience cards
+ * @returns Array of PathConnector configs for the timeline
+ */
 function generateConnectors(total: number): PathConnector[] {
   const mdCols = 2;
   const xlCols = 3;
