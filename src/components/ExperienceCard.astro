@@ -6,68 +6,71 @@ interface Props {
   title: string;
   description: string;
   date: string;
-  position: CardPosition;
+  positionSm: CardPosition;
+  positionMd: CardPosition;
+  positionXl: CardPosition;
   orderSm: number;
   orderMd: number;
   orderXl: number;
 }
 
-const { title, description, date, position, orderSm, orderMd, orderXl } =
+const { title, description, date, positionSm, positionMd, positionXl, orderSm, orderMd, orderXl } =
   Astro.props;
 
-const isTop = position === "top";
+const isTopSm = positionSm === "top";
+const isTopMd = positionMd === "top";
+const isTopXl = positionXl === "top";
+
+const topVis = `${isTopSm ? "flex" : "hidden"} ${isTopMd ? "md:flex" : "md:hidden"} ${isTopXl ? "2xl:flex" : "2xl:hidden"}`;
+const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:hidden"} ${!isTopXl ? "2xl:flex" : "2xl:hidden"}`;
 ---
 
 <li
-  class="experience-card relative flex h-140 flex-1 flex-col items-center"
+  class="experience-card relative flex mb-28 md:mb-0 h-70 md:h-140 flex-1 flex-col items-center"
   style={`--order-sm: ${orderSm}; --order-md: ${orderMd}; --order-xl: ${orderXl};`}
 >
   <div
-    class="absolute top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"
+    class="absolute top-full md:top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"
     aria-hidden="true"
   >
   </div>
-  {
-    isTop ? (
-      <>
-        <div class="mb-16 flex flex-1 flex-col gap-4">
-          <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-            {title}
-          </h2>
-          <p class="flex h-30 items-center overflow-auto">{description}</p>
-          <time class="text-center text-xl font-bold" datetime={date}>
-            {date}
-          </time>
-        </div>
-        <div
-          class="absolute top-[calc(50%-8px)] flex -translate-y-1/2 items-center justify-center"
-          aria-hidden="true"
-        >
-          <div style="color: var(--theme-darkest)" set:html={pinSvg} />
-        </div>
-        <div class="flex-1" />
-      </>
-    ) : (
-      <>
-        <div class="flex-1" />
-        <div
-          class="absolute top-[calc(50%+10px)] flex -translate-y-1/2 rotate-180 items-center justify-center"
-          aria-hidden="true"
-        >
-          <div style="color: var(--theme-darkest)" set:html={pinSvg} />
-        </div>
-        <div class="mt-20 flex flex-1 flex-col gap-4">
-          <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
-            {title}
-          </h2>
-          <p class="flex h-30 items-center overflow-auto">{description}</p>
-          <time class="text-center text-xl font-bold" datetime={date}>
-            {date}
-          </time>
-        </div>
-      </>
-    )
-  }
+  
+  {/* Top Layout */}
+  <div class={`${topVis} mb-20 flex-1 flex-col gap-4`}>
+    <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+      {title}
+    </h2>
+    <p class="flex h-28 items-center overflow-auto">{description}</p>
+    <time class="flex flex-1 items-center justify-center text-center text-xl font-bold" datetime={date}>
+      {date}
+    </time>
+  </div>
+  <div
+    class={`${topVis} absolute top-[calc(100%-8px)] md:top-[calc(50%-8px)] -translate-y-1/2 items-center justify-center`}
+    aria-hidden="true"
+  >
+    <div style="color: var(--theme-darkest)" set:html={pinSvg} />
+  </div>
+
+  {/* Fill missing space */}
+  <div class={`flex-1 w-full`} />
+  
+  {/* Bottom Layout */}
+  <div
+    class={`${bottomVis} absolute top-[calc(50%+10px)] -translate-y-1/2 rotate-180 items-center justify-center`}
+    aria-hidden="true"
+  >
+    <div style="color: var(--theme-darkest)" set:html={pinSvg} />
+  </div>
+  <div class={`${bottomVis} mt-20 flex-1 flex-col gap-4`}>
+    <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+      {title}
+    </h2>
+    <p class="flex h-28 items-center overflow-auto">{description}</p>
+    <time class="flex flex-1 items-top justify-center text-center text-xl font-bold" datetime={date}>
+      {date}
+    </time>
+  </div>
 </li>
 
 <style>

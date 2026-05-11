@@ -22,7 +22,7 @@ interface PathConnector {
 
 const experiences: Experience[] = [
   {
-    title: "Panamerican Games Volunteer",
+    title: "Panam Games Volunteer",
     description:
       "I facilitated effective communication between English-speaking individuals and the teams responsible for organizing the games.",
     date: "2023",
@@ -132,8 +132,12 @@ function generateConnectors(total: number): PathConnector[] {
     const evenRow = pairIndex % 2 === 0;
 
     const type: PathType = evenRow
-      ? side === 0 ? "top-left" : "bottom-right"
-      : side === 0 ? "bottom-left" : "top-right";
+      ? side === 0
+        ? "top-left"
+        : "bottom-right"
+      : side === 0
+        ? "bottom-left"
+        : "top-right";
 
     return {
       type,
@@ -155,16 +159,18 @@ const connectors = generateConnectors(experiences.length);
   <div
     class="grid h-full w-full grid-cols-[80px_1fr_80px] md:grid-cols-[80px_1fr_1fr_80px] 2xl:grid-cols-[80px_1fr_1fr_1fr_80px]"
   >
-    {connectors.map((c) => (
-      <ExperiencePath
-        type={c.type}
-        orderSm={c.orderSm}
-        orderMd={c.orderMd}
-        orderXl={c.orderXl}
-        hiddenMd={c.hiddenMd}
-        hiddenXl={c.hiddenXl}
-      />
-    ))}
+    {
+      connectors.map((c) => (
+        <ExperiencePath
+          type={c.type}
+          orderSm={c.orderSm}
+          orderMd={c.orderMd}
+          orderXl={c.orderXl}
+          hiddenMd={c.hiddenMd}
+          hiddenXl={c.hiddenXl}
+        />
+      ))
+    }
 
     {
       experiences.map((exp, i) => (
@@ -172,7 +178,9 @@ const connectors = generateConnectors(experiences.length);
           title={exp.title}
           description={exp.description}
           date={exp.date}
-          position={i % 2 === 0 ? "top" : "bottom"}
+          positionSm="top"
+          positionMd={i % 2 === 0 ? "top" : "bottom"}
+          positionXl={i % 3 === 1 ? "bottom" : "top"}
           orderSm={cardOrder(i, 1)}
           orderMd={cardOrder(i, 2)}
           orderXl={cardOrder(i, 3)}
