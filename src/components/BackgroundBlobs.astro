@@ -16,7 +16,26 @@ const blobSvg: Record<BlobType, string> = {
   "diamond-medium-alternates": diamondMediumAlternates,
 };
 
-const blobs = [
+const smBlobs = [
+  {
+    position: "top-0 left-0 -translate-x-1/2 -translate-y-1/2",
+    spinClass: "animate-blob-spin-22",
+  },
+  {
+    position: "top-0 right-0 translate-x-1/2 -translate-y-1/2",
+    spinClass: "animate-blob-spin-20",
+  },
+  {
+    position: "bottom-0 left-0 -translate-x-1/2 translate-y-1/2",
+    spinClass: "animate-blob-spin-25-reverse",
+  },
+  {
+    position: "bottom-0 right-0 translate-x-1/2 translate-y-1/2",
+    spinClass: "animate-blob-spin-20",
+  },
+];
+
+const mdBlobs = [
   {
     position: "top-0 right-0 translate-x-1/2 -translate-y-1/2",
     spinClass: "animate-blob-spin-20",
@@ -44,10 +63,24 @@ const blobs = [
     position + click scale, the inner div handles the continuous spin.
   -->
   {
-    blobs.map((blob) => (
+    smBlobs.map((blob) => (
       <div
         data-blob
-        class={`blob-wrapper pointer-events-auto absolute ${blob.position} size-42 md:size-54 lg:size-64 cursor-pointer`}
+        class={`blob-wrapper pointer-events-auto absolute ${blob.position} size-36 md:hidden cursor-pointer`}
+      >
+        <div
+          class={`h-full w-full ${blob.spinClass} blob-shape`}
+          style={`color: var(--theme-default)`}
+          set:html={blobSvg[type]}
+        />
+      </div>
+    ))
+  }
+  {
+    mdBlobs.map((blob) => (
+      <div
+        data-blob
+        class={`blob-wrapper pointer-events-auto absolute hidden md:block ${blob.position} size-42 md:size-44 lg:size-64 cursor-pointer`}
       >
         <div
           class={`h-full w-full ${blob.spinClass} blob-shape`}
