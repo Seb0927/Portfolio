@@ -10,14 +10,16 @@ const formActionUrl = "https://formsubmit.co/a9vata6qp@mozmail.com";
 
 <Layout title="Contact" theme="purple" blobType="circle-pentagon">
   <PageTitle text="More about me?" />
-  <div class="flex w-full flex-col gap-6 md:gap-24 md:flex-row">
+  <div class="flex w-full flex-col gap-6 md:flex-row md:gap-24">
     <section class="mb-4 flex w-full flex-col gap-6 md:w-1/2">
       <p class="text-lg">
         You can find more about me on the following sites! I will be happy to
         connect with you:
       </p>
 
-      <div class="flex w-full flex-row justify-center md:justify-start gap-8 md:gap-12">
+      <div
+        class="flex w-full flex-row justify-center gap-8 md:justify-start md:gap-12"
+      >
         <a
           href="https://github.com/Seb0927"
           target="_blank"
@@ -35,16 +37,14 @@ const formActionUrl = "https://formsubmit.co/a9vata6qp@mozmail.com";
       </div>
     </section>
 
-    <section class="flex flex-col gap-6 w-full md:w-1/2">
-      <p class="text-lg">
-        Or feel free to reach me out. No compromise
-      </p>
+    <section class="flex w-full flex-col gap-6 md:w-1/2">
+      <p class="text-lg">Or feel free to reach me out. No compromise</p>
       <form class="w-full" action={formActionUrl} method="POST">
         <div class="mb-6 flex flex-wrap lg:-ml-3">
           <div class="w-full lg:mb-0 lg:w-1/4 lg:px-3">
             <label class="mb-1 block text-sm italic" for="name">Name:</label>
             <input
-              class="mb-3 block w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black  focus:outline-none focus:ring-2 focus:ring-(--theme-darkest)"
+              class="mb-3 block w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black focus:ring-2 focus:ring-(--theme-darkest) focus:outline-none"
               id="name"
               type="text"
               name="name"
@@ -53,7 +53,7 @@ const formActionUrl = "https://formsubmit.co/a9vata6qp@mozmail.com";
           <div class="w-full lg:mb-3 lg:w-3/4 lg:px-3">
             <label class="mb-1 block text-sm italic" for="email">Email:</label>
             <input
-              class="mb-3 block w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black  focus:outline-none focus:ring-2 focus:ring-(--theme-darkest)"
+              class="mb-3 block w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black focus:ring-2 focus:ring-(--theme-darkest) focus:outline-none"
               id="email"
               type="text"
               name="email"
@@ -64,7 +64,7 @@ const formActionUrl = "https://formsubmit.co/a9vata6qp@mozmail.com";
               >Message:</label
             >
             <textarea
-              class="mb-6 block h-36 max-h-56 min-h-12 w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black  focus:outline-none focus:ring-2 focus:ring-(--theme-darkest)"
+              class="mb-6 block h-36 max-h-56 min-h-12 w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black focus:ring-2 focus:ring-(--theme-darkest) focus:outline-none"
               id="message"
               name="message"></textarea>
           </div>
