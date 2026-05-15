@@ -14,8 +14,17 @@ interface Props {
   orderXl: number;
 }
 
-const { title, description, date, positionSm, positionMd, positionXl, orderSm, orderMd, orderXl } =
-  Astro.props;
+const {
+  title,
+  description,
+  date,
+  positionSm,
+  positionMd,
+  positionXl,
+  orderSm,
+  orderMd,
+  orderXl,
+} = Astro.props;
 
 const isTopSm = positionSm === "top";
 const isTopMd = positionMd === "top";
@@ -26,22 +35,25 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
 ---
 
 <li
-  class="experience-card relative flex mb-28 md:mb-0 h-70 md:h-140 flex-1 flex-col items-center"
+  class="experience-card relative mb-28 flex h-70 flex-1 flex-col items-center md:mb-0 md:h-140"
   style={`--order-sm: ${orderSm}; --order-md: ${orderMd}; --order-xl: ${orderXl};`}
 >
   <div
-    class="absolute top-full md:top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"
+    class="absolute top-full left-0 -z-10 w-full border-t border-(--theme-darkest) md:top-1/2"
     aria-hidden="true"
   >
   </div>
-  
+
   {/* Top Layout */}
   <div class={`${topVis} mb-20 flex-1 flex-col gap-4`}>
-    <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+    <h2 class="max-h-18 overflow-auto text-center text-xl font-bold">
       {title}
     </h2>
     <p class="flex h-28 items-center overflow-auto">{description}</p>
-    <time class="flex flex-1 items-center justify-center text-center text-xl font-bold" datetime={date}>
+    <time
+      class="flex flex-1 items-center justify-center text-center text-lg font-bold"
+      datetime={date}
+    >
       {date}
     </time>
   </div>
@@ -53,8 +65,8 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
   </div>
 
   {/* Fill missing space */}
-  <div class={`flex-1 w-full`} />
-  
+  <div class={`flex-1 w-full`}></div>
+
   {/* Bottom Layout */}
   <div
     class={`${bottomVis} absolute top-[calc(50%+10px)] -translate-y-1/2 rotate-180 items-center justify-center`}
@@ -63,11 +75,14 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
     <div style="color: var(--theme-darkest)" set:html={pinSvg} />
   </div>
   <div class={`${bottomVis} mt-20 flex-1 flex-col gap-4`}>
-    <h2 class="max-h-18 overflow-auto text-center text-2xl font-bold">
+    <h2 class="max-h-18 overflow-auto text-center text-xl font-bold">
       {title}
     </h2>
     <p class="flex h-28 items-center overflow-auto">{description}</p>
-    <time class="flex flex-1 items-top justify-center text-center text-xl font-bold" datetime={date}>
+    <time
+      class="items-top flex flex-1 justify-center text-center text-lg font-bold"
+      datetime={date}
+    >
       {date}
     </time>
   </div>
