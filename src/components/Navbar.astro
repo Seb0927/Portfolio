@@ -22,7 +22,7 @@ if (indexPath <= 0) {
       {
         navLinks.map((link) => (
           <li
-            class="flex-1 p-2 text-center text-lg font-medium"
+            class="flex-1 p-2 text-center"
             transition:name={`nav-desktop-${link.path}`}
           >
             <a href={link.path} class="block w-full">
@@ -60,7 +60,7 @@ if (indexPath <= 0) {
       {
         mobileLinks.map((link) => (
           <li
-            class="flex-1 p-2 text-center text-lg font-medium"
+            class="flex-1 p-2 text-center font-medium"
             transition:name={`nav-mobile-${link.path}`}
           >
             <a href={link.path} class="block w-full">
