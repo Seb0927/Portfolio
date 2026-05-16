@@ -45,11 +45,13 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
   </div>
 
   {/* Top Layout */}
-  <div class={`${topVis} h-full flex-1 flex-col`}>
+  <div class={`${topVis} max-w-80 h-full flex-1 flex-col`}>
     <h2 class="mb-4 max-h-18 overflow-auto text-center text-xl font-bold">
       {title}
     </h2>
-    <p class="mb-4 overflow-auto text-sm md:text-base lg:h-28">
+    <p
+      class="mb-4 max-h-none overflow-scroll text-sm md:max-h-30 md:text-base lg:h-28"
+    >
       {description}
     </p>
     <time
@@ -70,17 +72,17 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
   <div class="hidden w-full flex-1 md:block"></div>
 
   {/* Bottom Layout */}
-  <div class={`${bottomVis} h-full flex-1 flex-col`}>
+  <div class={`${bottomVis} max-w-80 h-full flex-1 flex-col`}>
     <div
       class="flex -translate-y-3/12 rotate-180 items-center justify-center"
       style="color: var(--theme-darkest)"
       set:html={pinSvg}
     />
 
-    <h2 class="max-h-18 overflow-auto text-center text-xl font-bold mb-4">
+    <h2 class="mb-4 max-h-18 overflow-auto text-center text-xl font-bold">
       {title}
     </h2>
-    <p class="overflow-auto text-sm md:text-base lg:h-28 mb-4">
+    <p class="mb-4 max-h-30 overflow-scroll text-sm md:text-base lg:h-28">
       {description}
     </p>
     <time
