@@ -45,42 +45,46 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
   </div>
 
   {/* Top Layout */}
-  <div class={`${topVis} mb-20 flex-1 flex-col gap-4`}>
-    <h2 class="max-h-18 overflow-auto text-center text-xl font-bold">
+  <div class={`${topVis} h-full flex-1 flex-col`}>
+    <h2 class="mb-4 max-h-18 overflow-auto text-center text-xl font-bold">
       {title}
     </h2>
-    <p class="h-32 overflow-auto text-sm md:text-base lg:h-28">{description}</p>
+    <p class="mb-4 overflow-auto text-sm md:text-base lg:h-28">
+      {description}
+    </p>
     <time
-      class="flex flex-1 items-center justify-center text-center text-lg font-bold"
+      class="flex flex-1 items-end justify-center text-center text-lg font-bold"
       datetime={date}
     >
       {date}
     </time>
-  </div>
-  <div
-    class={`${topVis} absolute top-[calc(100%-8px)] md:top-[calc(50%-8px)] -translate-y-1/2 items-center justify-center`}
-    aria-hidden="true"
-  >
-    <div style="color: var(--theme-darkest)" set:html={pinSvg} />
+
+    <div
+      class="flex translate-y-3/12 items-center justify-center"
+      style="color: var(--theme-darkest)"
+      set:html={pinSvg}
+    />
   </div>
 
   {/* Fill missing space */}
-  <div class={`flex-1 w-full`}></div>
+  <div class="hidden w-full flex-1 md:block"></div>
 
   {/* Bottom Layout */}
-  <div
-    class={`${bottomVis} absolute top-[calc(50%+10px)] -translate-y-1/2 rotate-180 items-center justify-center`}
-    aria-hidden="true"
-  >
-    <div style="color: var(--theme-darkest)" set:html={pinSvg} />
-  </div>
-  <div class={`${bottomVis} mt-20 flex-1 flex-col gap-4`}>
-    <h2 class="max-h-18 overflow-auto text-center text-xl font-bold">
+  <div class={`${bottomVis} h-full flex-1 flex-col`}>
+    <div
+      class="flex -translate-y-3/12 rotate-180 items-center justify-center"
+      style="color: var(--theme-darkest)"
+      set:html={pinSvg}
+    />
+
+    <h2 class="max-h-18 overflow-auto text-center text-xl font-bold mb-4">
       {title}
     </h2>
-    <p class="h-32 overflow-auto text-sm md:text-base lg:h-28">{description}</p>
+    <p class="overflow-auto text-sm md:text-base lg:h-28 mb-4">
+      {description}
+    </p>
     <time
-      class="items-top flex flex-1 justify-center text-center text-lg font-bold"
+      class="flex items-center justify-center text-center text-lg font-bold"
       datetime={date}
     >
       {date}
