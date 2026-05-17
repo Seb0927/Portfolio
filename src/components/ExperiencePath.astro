@@ -12,44 +12,51 @@ interface Props {
   hiddenXl?: boolean;
 }
 
-const { type, orderSm, orderMd, orderXl, hiddenMd = false, hiddenXl = false } = Astro.props;
+const {
+  type,
+  orderSm,
+  orderMd,
+  orderXl,
+  hiddenMd = false,
+  hiddenXl = false,
+} = Astro.props;
 
 const pathConfigs: Record<
   PathType,
-  { segments: { svg: "line" | "curve"; rotation: number }[]; hasTranslate: boolean }
+  {
+    lineFirst: boolean;
+    lineAlign: "left" | "right";
+    curveRotation: number;
+    hasTranslate: boolean;
+  }
 > = {
   "top-left": {
-    segments: [
-      { svg: "line", rotation: 0 },
-      { svg: "curve", rotation: 0 },
-    ],
+    lineFirst: true,
+    lineAlign: "left",
+    curveRotation: 0,
     hasTranslate: false,
   },
   "bottom-right": {
-    segments: [
-      { svg: "curve", rotation: 180 },
-      { svg: "line", rotation: 180 },
-    ],
+    lineFirst: false,
+    lineAlign: "right",
+    curveRotation: 180,
     hasTranslate: true,
   },
   "bottom-left": {
-    segments: [
-      { svg: "line", rotation: 180 },
-      { svg: "curve", rotation: 270 },
-    ],
+    lineFirst: true,
+    lineAlign: "right",
+    curveRotation: 270,
     hasTranslate: false,
   },
   "top-right": {
-    segments: [
-      { svg: "curve", rotation: 90 },
-      { svg: "line", rotation: 0 },
-    ],
+    lineFirst: false,
+    lineAlign: "left",
+    curveRotation: 90,
     hasTranslate: true,
   },
 };
 
 const config = pathConfigs[type];
-const svgs: Record<string, string> = { line, curve };
 ---
 
 <div
@@ -62,12 +69,41 @@ const svgs: Record<string, string> = { line, curve };
   style={`--order-sm: ${orderSm}; --order-md: ${orderMd}; --order-xl: ${orderXl};`}
   aria-hidden="true"
 >
-  {config.segments.map(({ svg, rotation }) => (
-    <div
-      style={`transform: rotate(${rotation}deg); color: var(--theme-darkest);`}
-      set:html={svgs[svg]}
-    />
-  ))}
+  {
+    config.lineFirst ? (
+      <>
+        <div
+          class:list={[
+            "w-px",
+            config.lineAlign === "left" ? "mr-auto" : "ml-auto",
+          ]}
+          style={`color: var(--theme-darkest);`}
+          set:html={line}
+        />
+        <div
+          class="size-20"
+          style={`transform: rotate(${config.curveRotation}deg); color: var(--theme-darkest);`}
+          set:html={curve}
+        />
+      </>
+    ) : (
+      <>
+        <div
+          class="size-20"
+          style={`transform: rotate(${config.curveRotation}deg); color: var(--theme-darkest);`}
+          set:html={curve}
+        />
+        <div
+          class:list={[
+            "w-px",
+            config.lineAlign === "left" ? "mr-auto" : "ml-auto",
+          ]}
+          style={`color: var(--theme-darkest);`}
+          set:html={line}
+        />
+      </>
+    )
+  }
 </div>
 
 <style>
