@@ -7,4 +7,8 @@ export type BlobType =
 
 export type CardPosition = "top" | "bottom";
 
-export type PathType = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+export type PathType =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";

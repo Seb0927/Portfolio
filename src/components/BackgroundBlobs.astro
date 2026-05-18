@@ -66,7 +66,7 @@ const mdBlobs = [
     smBlobs.map((blob) => (
       <div
         data-blob
-        class={`blob-wrapper pointer-events-auto absolute ${blob.position} size-36 md:hidden cursor-pointer`}
+        class={`blob-wrapper pointer-events-auto absolute ${blob.position} size-36 cursor-pointer md:hidden`}
       >
         <div
           class={`h-full w-full ${blob.spinClass} blob-shape`}
@@ -80,7 +80,7 @@ const mdBlobs = [
     mdBlobs.map((blob) => (
       <div
         data-blob
-        class={`blob-wrapper pointer-events-auto absolute hidden md:block ${blob.position} size-42 md:size-44 lg:size-64 cursor-pointer`}
+        class={`blob-wrapper pointer-events-auto absolute hidden md:block ${blob.position} size-42 cursor-pointer md:size-44 lg:size-64`}
       >
         <div
           class={`h-full w-full ${blob.spinClass} blob-shape`}
