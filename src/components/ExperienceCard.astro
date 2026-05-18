@@ -35,7 +35,7 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
 ---
 
 <li
-  class="experience-card relative mb-28 flex h-70 min-w-42 flex-1 flex-col items-center md:mb-0 md:h-140"
+  class="experience-card relative flex h-80 min-w-42 flex-1 flex-col items-center md:h-140"
   style={`--order-sm: ${orderSm}; --order-md: ${orderMd}; --order-xl: ${orderXl};`}
 >
   <div
@@ -46,7 +46,7 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
 
   {/* Top Layout */}
   <div class={`${topVis} max-w-80 h-full flex-1 flex-col`}>
-    <h2 class="mb-4 max-h-18 overflow-auto text-center text-xl font-bold">
+    <h2 class="flex-1 flex items-end justify-center mb-4 md:max-h-18 overflow-auto text-center text-xl font-bold">
       {title}
     </h2>
     <p
@@ -55,7 +55,7 @@ const bottomVis = `${!isTopSm ? "flex" : "hidden"} ${!isTopMd ? "md:flex" : "md:
       {description}
     </p>
     <time
-      class="flex flex-1 items-end justify-center text-center text-lg font-bold"
+      class="flex md:flex-1 items-end justify-center text-center text-lg font-bold"
       datetime={date}
     >
       {date}

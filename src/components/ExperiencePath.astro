@@ -1,6 +1,5 @@
 ---
 import type { PathType } from "@/types";
-import line from "@/assets/vectors/line.svg?raw";
 import curve from "@/assets/vectors/curve.svg?raw";
 
 interface Props {
@@ -61,7 +60,7 @@ const config = pathConfigs[type];
 
 <div
   class:list={[
-    "experience-path h-min max-w-20",
+    "experience-path flex h-[calc(100%+1px)] flex-col md:h-[calc(50%+1px)]",
     { "translate-y-[calc(100%-1px)]": config.hasTranslate },
     { "md:hidden": hiddenMd },
     { "2xl:hidden": hiddenXl },
@@ -73,15 +72,19 @@ const config = pathConfigs[type];
     config.lineFirst ? (
       <>
         <div
-          class:list={[
-            "w-px",
-            config.lineAlign === "left" ? "mr-auto" : "ml-auto",
-          ]}
-          style={`color: var(--theme-darkest);`}
-          set:html={line}
+          class="block size-12 md:hidden md:size-20"
+          style={`transform: rotate(${config.curveRotation === 0 ? 90 : 180}deg); color: var(--theme-darkest);`}
+          set:html={curve}
         />
         <div
-          class="size-20"
+          class:list={[
+            "min-h-0 flex-1 md:block",
+            config.lineAlign === "left" ? "border-l" : "border-r",
+            "border-(--theme-darkest)",
+          ]}
+        />
+        <div
+          class="size-12 md:size-20"
           style={`transform: rotate(${config.curveRotation}deg); color: var(--theme-darkest);`}
           set:html={curve}
         />
@@ -89,17 +92,16 @@ const config = pathConfigs[type];
     ) : (
       <>
         <div
-          class="size-20"
+          class="hidden size-12 md:block md:size-20"
           style={`transform: rotate(${config.curveRotation}deg); color: var(--theme-darkest);`}
           set:html={curve}
         />
         <div
           class:list={[
-            "w-px",
-            config.lineAlign === "left" ? "mr-auto" : "ml-auto",
+            "hidden min-h-0 flex-1 md:block",
+            config.lineAlign === "left" ? "border-l" : "border-r",
+            "border-(--theme-darkest)",
           ]}
-          style={`color: var(--theme-darkest);`}
-          set:html={line}
         />
       </>
     )
