@@ -60,7 +60,7 @@ const config = pathConfigs[type];
 
 <div
   class:list={[
-    "experience-path flex h-[calc(100%+1px)] flex-col md:h-[calc(50%+1px)]",
+    "experience-path group flex h-[calc(100%+1px)] flex-col md:h-[calc(50%+1px)]",
     { "translate-y-[calc(100%-1px)]": config.hasTranslate },
     { "md:hidden": hiddenMd },
     { "2xl:hidden": hiddenXl },
@@ -72,7 +72,7 @@ const config = pathConfigs[type];
     config.lineFirst ? (
       <>
         <div
-          class="block size-12 md:hidden md:size-20"
+          class="block size-12 group-first-of-type:hidden! md:hidden md:size-20"
           style={`transform: rotate(${config.curveRotation === 0 ? 90 : 180}deg); color: var(--theme-darkest);`}
           set:html={curve}
         />

@@ -126,7 +126,7 @@ function generateConnectors(total: number): PathConnector[] {
   const mdRows = Math.ceil(total / mdCols);
   const xlRows = Math.ceil(total / xlCols);
 
-  return Array.from({ length: total * 2 }, (_, i) => {
+  return Array.from({ length: (total * 2) - 1 }, (_, i) => {
     const pairIndex = Math.floor(i / 2);
     const side = i % 2;
     const evenRow = pairIndex % 2 === 0;
@@ -156,7 +156,7 @@ const connectors = generateConnectors(experiences.length);
 <Layout title="Experience" theme="amber" blobType="diamond-medium-alternates">
   <PageTitle text="Experience" />
 
-  <div
+  <ol
     class="overflow-visible grid h-full w-full grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr_1fr_auto] 2xl:grid-cols-[auto_1fr_1fr_1fr_auto]"
   >
     {
