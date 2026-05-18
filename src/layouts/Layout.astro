@@ -13,6 +13,10 @@ interface Props {
 }
 
 const { title, theme, blobType } = Astro.props;
+const isHome = title === "Home";
+const pageTitle = isHome
+  ? "Sebastian Idrobo Avirama"
+  : `${title} | Sebastian Idrobo Avirama`;
 ---
 
 <!doctype html>
@@ -22,16 +26,16 @@ const { title, theme, blobType } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Sebastián Idrobo - Software Engineer portfolio showcasing projects, experience, and blog posts."
+      content="Sebastián Idrobo Avirama - Software Engineer portfolio showcasing projects, experience, and blog posts."
     />
-    <meta property="og:title" content={`${title} | Sebastian Idrobo`} />
+    <meta property="og:title" content={pageTitle} />
     <meta
       property="og:description"
-      content="Sebastián Idrobo - Software Engineer portfolio showcasing projects, experience, and blog posts."
+      content="Sebastián Idrobo Avirama - Software Engineer portfolio showcasing projects, experience, and blog posts."
     />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Sebastian Idrobo</title>
+    <title>{pageTitle}</title>
     <Font cssVariable="--font-inter" />
     <ClientRouter />
   </head>
