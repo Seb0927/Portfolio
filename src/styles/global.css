@@ -28,6 +28,11 @@
   --animate-blob-spin-22: spin 22s linear infinite;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-dark) transparent;
+}
+
 [data-theme="green"] {
   --theme-darkest: var(--color-green-darkest);
   --theme-dark: var(--color-green-dark);
