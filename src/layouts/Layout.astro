@@ -17,6 +17,7 @@ const isHome = title === "Home";
 const pageTitle = isHome
   ? "Sebastian Idrobo Avirama"
   : `${title} | Sebastian Idrobo Avirama`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -35,6 +36,7 @@ const pageTitle = isHome
     />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
     <title>{pageTitle}</title>
     <Font cssVariable="--font-inter" />
     <ClientRouter />
