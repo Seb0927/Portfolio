@@ -43,7 +43,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
     <title>{pageTitle}</title>
-    <Font cssVariable="--font-inter" />
+    <Font cssVariable="--font-inter" preload />
     <ClientRouter />
   </head>
 
