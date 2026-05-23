@@ -113,6 +113,16 @@ const mdBlobs = [
   .blob-wrapper.blob-clicked {
     animation: blob-click 300ms ease;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blob-shape {
+      animation: none !important;
+    }
+
+    .blob-wrapper.blob-clicked {
+      animation: none !important;
+    }
+  }
 </style>
 
 <script>
