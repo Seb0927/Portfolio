@@ -1,7 +1,9 @@
 {
-  "$schema": "https://mcp.docs.astro.build/mcp",
+  "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "Astro Docs": {
+      "type": "remote",
+      "url": "https://mcp.docs.astro.build/mcp",
       "enabled": true
     }
   }
