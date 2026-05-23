@@ -2,12 +2,15 @@
 interface Props {
   svg: string;
   class?: string;
+  ariaLabel?: string;
 }
 
-const { svg, class: className = "" } = Astro.props;
+const { svg, class: className = "", ariaLabel } = Astro.props;
 ---
 
 <div
   class={`size-11 fill-current text-(--theme-dark) ${className}`}
+  role={ariaLabel ? "img" : undefined}
+  aria-label={ariaLabel}
   set:html={svg}
 />
