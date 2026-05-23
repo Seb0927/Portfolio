@@ -20,7 +20,7 @@ const { title, description, icons, image, imageAlt, imagePosition } =
     imagePosition === "left" && (
       <div class="hidden min-h-full items-center justify-center md:flex">
         <div class="flex size-full items-center justify-center rounded-4xl bg-white md:max-h-48 md:w-64 lg:max-h-56 lg:w-80 xl:w-88">
-          <Image class="max-h-24 max-w-24" src={image} alt={imageAlt} />
+          <Image class="max-h-24 max-w-24" src={image} alt={imageAlt} layout="constrained" />
         </div>
       </div>
     )
@@ -36,7 +36,7 @@ const { title, description, icons, image, imageAlt, imagePosition } =
       <div
         class="flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white md:hidden"
       >
-        <Image class="max-h-20 max-w-20" src={image} alt={imageAlt} />
+        <Image class="max-h-20 max-w-20" src={image} alt={imageAlt} layout="constrained" />
       </div>
     </div>
 
@@ -49,7 +49,7 @@ const { title, description, icons, image, imageAlt, imagePosition } =
     imagePosition === "right" && (
       <div class="hidden min-h-full items-center justify-center md:flex">
         <div class="flex size-full items-center justify-center rounded-4xl bg-white md:max-h-48 md:w-64 lg:max-h-56 lg:w-80 xl:w-88">
-          <Image class="max-h-24 max-w-24" src={image} alt={imageAlt} />
+          <Image class="max-h-24 max-w-24" src={image} alt={imageAlt} layout="constrained" />
         </div>
       </div>
     )
