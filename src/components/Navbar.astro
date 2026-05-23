@@ -25,7 +25,11 @@ if (indexPath <= 0) {
             class="flex-1 p-2 text-center"
             transition:name={`nav-desktop-${link.path}`}
           >
-            <a href={link.path} class="block w-full">
+            <a
+              href={link.path}
+              class="block w-full"
+              aria-current={currentPath === link.path ? "page" : undefined}
+            >
               {link.label}
             </a>
           </li>
@@ -63,7 +67,11 @@ if (indexPath <= 0) {
             class="flex-1 p-2 text-center font-medium"
             transition:name={`nav-mobile-${link.path}`}
           >
-            <a href={link.path} class="block w-full">
+            <a
+              href={link.path}
+              class="block w-full"
+              aria-current={currentPath === link.path ? "page" : undefined}
+            >
               {link.label}
             </a>
           </li>
