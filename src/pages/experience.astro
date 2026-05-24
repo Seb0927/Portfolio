@@ -4,12 +4,7 @@ import PageTitle from "@/components/PageTitle.astro";
 import ExperienceCard from "@/components/ExperienceCard.astro";
 import ExperiencePath from "@/components/ExperiencePath.astro";
 import type { PathType } from "@/types";
-
-interface Experience {
-  title: string;
-  description: string;
-  date: string;
-}
+import { getCollection } from "astro:content";
 
 interface PathConnector {
   type: PathType;
@@ -20,38 +15,9 @@ interface PathConnector {
   hiddenXl?: boolean;
 }
 
-const experiences: Experience[] = [
-  {
-    title: "Panam Games Volunteer",
-    description:
-      "I facilitated effective communication between English-speaking individuals and the teams responsible for organizing the games.",
-    date: "2023",
-  },
-  {
-    title: "Academic Assistant",
-    description:
-      "I provided socio-educational support to first-semester students to offer academic assistance in programming courses.",
-    date: "2024",
-  },
-  {
-    title: "Technical Support Monitor",
-    description:
-      "I provided technical support for audiovisual and computer equipment in classrooms and labs at Universidad del Valle",
-    date: "2024",
-  },
-  {
-    title: "Software Developer Intern",
-    description:
-      "I built an interactive web application for dynamic visualization of key indicators, and support ETL processes that gathered data",
-    date: "2025",
-  },
-  {
-    title: "Implementation Consultant",
-    description:
-      "I led the onboarding lifecycle through timelines, effective customer transitions toward optimal product adoption.",
-    date: "2025",
-  },
-];
+const experiences = (await getCollection("experience")).sort(
+  (a, b) => a.data.date.localeCompare(b.data.date) || a.id.localeCompare(b.id),
+);
 
 /**
  * Computes the CSS grid order for a timeline path connector at a given
@@ -175,9 +141,9 @@ const connectors = generateConnectors(experiences.length);
     {
       experiences.map((exp, i) => (
         <ExperienceCard
-          title={exp.title}
-          description={exp.description}
-          date={exp.date}
+          title={exp.data.title}
+          description={exp.data.description}
+          date={exp.data.date}
           positionSm="top"
           positionMd={i % 2 === 0 ? "top" : "bottom"}
           positionXl={i % 3 === 1 ? "bottom" : "top"}

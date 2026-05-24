@@ -2,50 +2,47 @@
 import { siReact, siNextdotjs, siTailwindcss, siGo } from "simple-icons";
 import azureIcon from "@/assets/icons/azure.svg?raw";
 import geminiIcon from "@/assets/icons/gemini.svg?raw";
+import accedemiaImg from "@/assets/images/projects/accedemia.png";
+import adagiaImg from "@/assets/images/projects/adagia.png";
 import Layout from "../layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
-import accedemiaImg from "@/assets/images/projects/accedemia.png";
-import adagiaImg from "@/assets/images/projects/adagia.png";
+import { getCollection } from "astro:content";
+import type { ImageMetadata } from "astro";
 
-const accedemiaIcons = [
-  { svg: siReact.svg },
-  { svg: siNextdotjs.svg },
-  { svg: siTailwindcss.svg },
-  { svg: azureIcon },
-  { svg: geminiIcon },
-];
+const iconMap: Record<string, string> = {
+  react: siReact.svg,
+  nextdotjs: siNextdotjs.svg,
+  tailwindcss: siTailwindcss.svg,
+  go: siGo.svg,
+  azure: azureIcon,
+  gemini: geminiIcon,
+};
 
-// Go's icon is visually smaller in simple-icons, so it uses a larger size
-// with negative margins to compensate and align with other icons.
-const adagiaIcons = [
-  { svg: siReact.svg },
-  { svg: siNextdotjs.svg },
-  { svg: siTailwindcss.svg },
-  { svg: siGo.svg, class: "-mx-4 -my-2 size-16" },
-];
+const imageMap: Record<string, ImageMetadata> = {
+  accedemia: accedemiaImg,
+  adagia: adagiaImg,
+};
+
+const projects = await getCollection("projects");
 ---
 
 <Layout title="Projects" theme="purple" blobType="circle-pentagon">
   <PageTitle text="My work" />
-
   <div class="flex w-full flex-col gap-12 md:gap-20">
-    <ProjectCard
-      title="Accedemia - 2026"
-      description="Accedemia is a research project focused on creating an interactive learning platform about the Web Content Accessibility Guidelines (WCAG). Its main objective is to facilitate the understanding and application of these standards for developers, designers, and digital professionals, thereby contributing to a more inclusive web."
-      icons={accedemiaIcons}
-      image={accedemiaImg}
-      imageAlt="Accedemia icon"
-      imagePosition="right"
-    />
-
-    <ProjectCard
-      title="Adagia - 2025"
-      description="Adagia is a real-time agroclimatic platform developed for the Alliance Bioversity and CIAT to streamline environmental monitoring. By integrating data from multiple weather stations into an interactive dashboard, it transforms meteorological variables into actionable insights, helping researchers to make evidence-based decisions for field operations."
-      icons={adagiaIcons}
-      image={adagiaImg}
-      imageAlt="Adagia icon"
-      imagePosition="left"
-    />
+    {
+      projects.map((project, i) => (
+        <ProjectCard
+          title={project.data.title}
+          description={project.data.description}
+          icons={project.data.icons.map((name) => ({
+            svg: iconMap[name],
+          }))}
+          image={imageMap[project.data.image]}
+          imageAlt={project.data.imageAlt}
+          imagePosition={i % 2 === 0 ? "right" : "left"}
+        />
+      ))
+    }
   </div>
 </Layout>
