@@ -13,13 +13,14 @@ const experience = defineCollection({
 
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    image: z.string(),
-    imageAlt: z.string(),
-    icons: z.array(z.string()),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      image: image(),
+      imageAlt: z.string(),
+      icons: z.array(z.string()),
+    }),
 });
 
 export const collections = { experience, projects };

@@ -2,13 +2,10 @@
 import { siReact, siNextdotjs, siTailwindcss, siGo } from "simple-icons";
 import azureIcon from "@/assets/icons/azure.svg?raw";
 import geminiIcon from "@/assets/icons/gemini.svg?raw";
-import accedemiaImg from "@/assets/images/projects/accedemia.png";
-import adagiaImg from "@/assets/images/projects/adagia.png";
 import Layout from "../layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import { getCollection } from "astro:content";
-import type { ImageMetadata } from "astro";
 
 const iconMap: Record<string, string> = {
   react: siReact.svg,
@@ -19,30 +16,24 @@ const iconMap: Record<string, string> = {
   gemini: geminiIcon,
 };
 
-const imageMap: Record<string, ImageMetadata> = {
-  accedemia: accedemiaImg,
-  adagia: adagiaImg,
-};
-
 const projects = await getCollection("projects");
 ---
 
 <Layout title="Projects" theme="purple" blobType="circle-pentagon">
   <PageTitle text="My work" />
+
   <div class="flex w-full flex-col gap-12 md:gap-20">
-    {
-      projects.map((project, i) => (
-        <ProjectCard
-          title={project.data.title}
-          description={project.data.description}
-          icons={project.data.icons.map((name) => ({
-            svg: iconMap[name],
-          }))}
-          image={imageMap[project.data.image]}
-          imageAlt={project.data.imageAlt}
-          imagePosition={i % 2 === 0 ? "right" : "left"}
-        />
-      ))
-    }
+    {projects.map((project, i) => (
+      <ProjectCard
+        title={project.data.title}
+        description={project.data.description}
+        icons={project.data.icons.map((name) => ({
+          svg: iconMap[name],
+        }))}
+        image={project.data.image}
+        imageAlt={project.data.imageAlt}
+        imagePosition={i % 2 === 0 ? "right" : "left"}
+      />
+    ))}
   </div>
 </Layout>
