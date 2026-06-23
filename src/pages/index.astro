@@ -2,18 +2,20 @@
 import Layout from "@/layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
 import TechIcon from "@/components/TechIcon.astro";
-import { Image } from "astro:assets";
+import Carousel from "@/components/Carousel.astro";
 import { siPython, siJavascript, siReact } from "simple-icons";
 import meImg from "@/assets/images/me/me.jpg";
+import meImg2 from "@/assets/images/me/me_2.jpg";
+import meImg3 from "@/assets/images/me/me_3.jpg";
 import ciatImg from "@/assets/images/career/CIAT.jpg";
+import githubImg from "@/assets/images/career/github.jpg";
+import truoraImg from "@/assets/images/career/truora.jpg";
 ---
 
 <Layout title="Home" theme="green" blobType="rounded-star">
   <PageTitle text="Hi! I'm Sebastián Idrobo" />
 
-  <section
-    class="flex w-full flex-col gap-8 md:flex-row md:gap-12 lg:gap-16 xl:gap-32"
-  >
+  <section class="flex w-full flex-col gap-8 lg:flex-row lg:gap-20 xl:gap-32">
     <div
       class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
     >
@@ -33,13 +35,15 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
     </div>
 
     <div class="flex flex-1 justify-center">
-      <Image
-        src={meImg}
-        alt="Sebastián Idrobo portrait"
-        layout="constrained"
-        loading="eager"
-        fetchpriority="high"
-        class="my-auto w-full max-w-108 rounded-4xl object-contain md:w-auto md:max-w-full md:min-w-64 lg:min-w-80 xl:min-w-96"
+      <Carousel
+        slides={[
+          { src: meImg, alt: "Sebastián Idrobo portrait" },
+          { src: meImg2, alt: "Sebastián Idrobo" },
+          { src: meImg3, alt: "Sebastián Idrobo" },
+        ]}
+        aspect="landscape"
+        ariaLabel="Photos of Sebastián"
+        class="my-auto w-full max-w-108 md:w-auto md:max-w-full md:min-w-64 lg:min-w-80 xl:min-w-96"
       />
     </div>
   </section>
@@ -47,16 +51,18 @@ import ciatImg from "@/assets/images/career/CIAT.jpg";
   <section class="mt-16">
     <h2 class="mb-8 text-center text-4xl font-semibold">About me</h2>
     <div
-      class="mb-12 flex w-full flex-col gap-8 md:mb-24 md:flex-row md:gap-12 lg:gap-16 xl:gap-32"
+      class="mb-12 flex w-full flex-col gap-8 md:mb-24 lg:flex-row lg:gap-20 xl:gap-32"
     >
       <div class="flex flex-1 justify-center">
-        <Image
-          src={ciatImg}
-          alt="CIAT workplace"
-          layout="constrained"
-          loading="eager"
-          fetchpriority="high"
-          class="my-auto w-full max-w-108 rounded-4xl object-contain md:w-auto md:max-w-full md:min-w-64 lg:min-w-80 xl:min-w-96"
+        <Carousel
+          slides={[
+            { src: ciatImg, alt: "CIAT workplace" },
+            { src: githubImg, alt: "GitHub workplace" },
+            { src: truoraImg, alt: "Truora workplace" },
+          ]}
+          aspect="landscape"
+          ariaLabel="Sebastián's career"
+          class="my-auto w-full max-w-108 md:w-auto md:max-w-full md:min-w-64 lg:min-w-80 xl:min-w-96"
         />
       </div>
 

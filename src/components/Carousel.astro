@@ -1,0 +1,314 @@
+---
+/**
+ * Carousel — a dependency-free "coverflow" carousel.
+ *
+ * Slides are stacked absolutely and positioned with 3D transforms based on
+ * their distance from the active slide; adjacent slides peek and rotate to
+ * create depth, and the first/last slides wrap around on both ends.
+ *
+ * Accessibility:
+ *  - Navigation is via the dot buttons (click, ArrowLeft/Right, Home/End).
+ *  - Peek slides are clickable as a pointer/touch enhancement *only* — they
+ *    are not keyboard-focusable (no tabindex) and have aria-hidden="true".
+ *  - A visually-hidden announcer (.carousel-announcer) mirrors the active
+ *    slide's alt text into an aria-live region on every change. This is the
+ *    reliable announcement path: toggling aria-hidden on <img> elements
+ *    inside a live region is inconsistently read by screen readers.
+ *  - View Transitions safe: init runs on "astro:page-load" with a guard flag
+ *    so it re-binds cleanly after ClientRouter navigations.
+ */
+import { Image } from "astro:assets";
+
+interface Slide {
+  src: ImageMetadata;
+  alt: string;
+}
+
+interface Props {
+  slides: Slide[];
+  aspect: "portrait" | "landscape";
+  ariaLabel: string;
+  class?: string;
+}
+
+const { slides, aspect, ariaLabel, class: className = "" } = Astro.props;
+
+const aspectClass = aspect === "portrait" ? "aspect-[4/5]" : "aspect-[4/3]";
+
+// Random per-instance id so multiple carousels on a page don't collide.
+const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<section
+  id={useId}
+  class:list={["carousel", "flex flex-col gap-4", className]}
+  aria-roledescription="carousel"
+  aria-label={ariaLabel}
+  data-carousel
+>
+  <div class:list={["carousel-viewport relative w-full", aspectClass]}>
+    <!--
+      Track: aria-live here is a secondary announcement path (kept because
+      it's harmless and may help some AT/browser pairs). The
+      .carousel-announcer below is the primary, reliable path.
+    -->
+    <ul class="carousel-track absolute inset-0" aria-live="polite">
+      {
+        slides.map((slide, index) => (
+          <li
+            class="carousel-slide absolute inset-0"
+            data-index={index}
+            aria-hidden={index === 0 ? "false" : "true"}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              layout="constrained"
+              class="h-full w-full rounded-4xl object-cover"
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchpriority={index === 0 ? "high" : "auto"}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!--
+    Visually-hidden announcer. Updated on each render()
+    with "Photo X of N: <alt>" — this plain-text live region is what screen
+    readers reliably announce, since toggling aria-hidden on <img> elements
+    within a live region reads inconsistently across AT.
+  -->
+  <p class="carousel-announcer sr-only" aria-live="polite">
+    {`Photo 1 of ${slides.length}: ${slides[0].alt}`}
+  </p>
+
+  <!--
+    Dots: plain buttons (not role="tab" — the matching tabpanel side was
+    never implemented, so the tab pattern would be incomplete/misleading).
+    aria-current marks the active dot
+  -->
+  <div
+    aria-label={ariaLabel}
+    class="carousel-dots flex flex-row flex-wrap items-center justify-center gap-2"
+  >
+    {
+      slides.map((_, index) => (
+        <button
+          type="button"
+          class="carousel-dot size-3 cursor-pointer rounded-full transition focus-visible:outline-2 focus-visible:outline-offset-2"
+          data-index={index}
+          aria-label={`Go to slide ${index + 1}`}
+        />
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .carousel-viewport {
+    perspective: 1000px;
+  }
+
+  .carousel-slide {
+    transition:
+      transform 300ms ease-out,
+      opacity 300ms ease-out,
+      filter 300ms ease-out;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+  }
+
+  .carousel-slide.is-active {
+    transform: translateX(0) scale(1) rotateY(0deg);
+    opacity: 1;
+    filter: none;
+    z-index: 30;
+  }
+
+  .carousel-slide.is-prev {
+    transform: translateX(-30%) scale(0.75) rotateY(15deg) rotateZ(-10deg);
+    opacity: 0.7;
+    filter: blur(1px);
+    z-index: 20;
+  }
+
+  .carousel-slide.is-next {
+    transform: translateX(30%) scale(0.75) rotateY(-15deg) rotateZ(10deg);
+    opacity: 0.7;
+    filter: blur(1px);
+    z-index: 20;
+  }
+
+  .carousel-slide.is-hidden {
+    transform: translateX(0) scale(0.75) rotateY(0deg);
+    opacity: 0;
+    filter: blur(2px);
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .carousel-slide.is-prev,
+  .carousel-slide.is-next {
+    cursor: pointer;
+  }
+
+  .carousel-dot {
+    background-color: transparent;
+    border: 2px solid var(--theme-darkest);
+  }
+
+  .carousel-dot[aria-current="true"] {
+    background-color: var(--theme-darkest);
+    scale: 1.1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-slide {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function initCarousel(root: HTMLElement) {
+    if (root.dataset.carouselInit === "true") return;
+    root.dataset.carouselInit = "true";
+
+    const slides = Array.from(
+      root.querySelectorAll<HTMLElement>(".carousel-slide"),
+    );
+    const dots = Array.from(
+      root.querySelectorAll<HTMLButtonElement>(".carousel-dot"),
+    );
+    const announcer = root.querySelector<HTMLElement>(".carousel-announcer");
+    if (slides.length === 0) return;
+
+    const total = slides.length;
+    let active = 0;
+
+    /**
+     * Recomputes every slide's positional class from its delta relative to
+     * the active slide. The delta is normalized with modulo so the rotation
+     * wraps on both ends (the last slide appears as "prev" when the first is
+     * active). Also toggles aria-hidden on slides, syncs the active dot, and
+     * updates the sr-only announcer with the active slide's alt text (read
+     * from the DOM so it stays in sync with the rendered attribute).
+     */
+    const render = () => {
+      slides.forEach((slide, index) => {
+        let delta = index - active;
+        if (delta > total / 2) delta -= total;
+        if (delta < -total / 2) delta += total;
+
+        slide.classList.remove("is-active", "is-prev", "is-next", "is-hidden");
+
+        if (delta === 0) {
+          slide.classList.add("is-active");
+          slide.setAttribute("aria-hidden", "false");
+        } else if (delta === -1) {
+          slide.classList.add("is-prev");
+          slide.setAttribute("aria-hidden", "true");
+        } else if (delta === 1) {
+          slide.classList.add("is-next");
+          slide.setAttribute("aria-hidden", "true");
+        } else {
+          slide.classList.add("is-hidden");
+          slide.setAttribute("aria-hidden", "true");
+        }
+      });
+
+      dots.forEach((dot, index) => {
+        if (index === active) {
+          dot.setAttribute("aria-current", "true");
+        } else {
+          dot.removeAttribute("aria-current");
+        }
+      });
+
+      if (announcer) {
+        const img = slides[active].querySelector("img");
+        announcer.textContent = `Photo ${active + 1} of ${total}: ${img?.alt ?? ""}`;
+      }
+    };
+
+    /**
+     * Advances to an arbitrary index. The double modulo `((i % total) +
+     * total) % total` is intentional: JS `%` can return negatives, so the
+     * outer +total wrap normalizes e.g. go(-1) on slide 0 → last slide.
+     */
+    const go = (index: number) => {
+      active = ((index % total) + total) % total;
+      render();
+    };
+
+    const next = () => go(active + 1);
+    const prev = () => go(active - 1);
+
+    // Pointer/touch enhancement only: clicking a peek slide moves toward it.
+    // Not keyboard-accessible (no tabindex) — dots + arrow keys cover a11y.
+    slides.forEach((slide) => {
+      slide.addEventListener("click", () => {
+        if (slide.classList.contains("is-prev")) prev();
+        else if (slide.classList.contains("is-next")) next();
+      });
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => go(index));
+      // Keyboard: ArrowLeft/Right step, Home/End jump (standard carousel pattern).
+      dot.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          prev();
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault();
+          next();
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          go(0);
+        } else if (event.key === "End") {
+          event.preventDefault();
+          go(total - 1);
+        }
+      });
+    });
+
+    // Swipe nav: 30px threshold distinguishes a swipe from a tap.
+    let touchStartX = 0;
+    let touchActive = false;
+
+    root.addEventListener(
+      "touchstart",
+      (event) => {
+        touchStartX = event.touches[0]?.clientX ?? 0;
+        touchActive = true;
+      },
+      { passive: true },
+    );
+
+    root.addEventListener(
+      "touchend",
+      (event) => {
+        if (!touchActive) return;
+        touchActive = false;
+        const touchEndX = event.changedTouches[0]?.clientX ?? 0;
+        const delta = touchEndX - touchStartX;
+        if (Math.abs(delta) > 30) {
+          if (delta < 0) next();
+          else prev();
+        }
+      },
+      { passive: true },
+    );
+
+    render();
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    document
+      .querySelectorAll<HTMLElement>("[data-carousel]")
+      .forEach(initCarousel);
+  });
+</script>
