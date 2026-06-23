@@ -16,6 +16,12 @@
  *    inside a live region is inconsistently read by screen readers.
  *  - View Transitions safe: init runs on "astro:page-load" with a guard flag
  *    so it re-binds cleanly after ClientRouter navigations.
+ *
+ * Autoplay:
+ *  - Pass `autoplay` (ms) to auto-advance. Omit for a manual-only carousel.
+ *  - Pauses on hover/focus and when the tab is hidden; restarts after manual
+ *    navigation so an autoplay tick doesn't undo a user choice.
+ *  - Disabled entirely under prefers-reduced-motion: reduce.
  */
 import { Image } from "astro:assets";
 
@@ -29,9 +35,16 @@ interface Props {
   aspect: "portrait" | "landscape";
   ariaLabel: string;
   class?: string;
+  autoplay?: number;
 }
 
-const { slides, aspect, ariaLabel, class: className = "" } = Astro.props;
+const {
+  slides,
+  aspect,
+  ariaLabel,
+  class: className = "",
+  autoplay,
+} = Astro.props;
 
 const aspectClass = aspect === "portrait" ? "aspect-[4/5]" : "aspect-[4/3]";
 
@@ -45,6 +58,7 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
   aria-roledescription="carousel"
   aria-label={ariaLabel}
   data-carousel
+  data-autoplay={autoplay}
 >
   <div class:list={["carousel-viewport relative w-full", aspectClass]}>
     <!--
@@ -172,6 +186,15 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
 </style>
 
 <script>
+  // Autoplay intervals/listeners register here so astro:before-swap can tear
+  // them down cleanly between View Transitions (no leaks, no detached-node
+  // events). The new page's astro:page-load handler sets up fresh state.
+  const cleanupFns: Array<() => void> = [];
+  document.addEventListener("astro:before-swap", () => {
+    cleanupFns.forEach((fn) => fn());
+    cleanupFns.length = 0;
+  });
+
   function initCarousel(root: HTMLElement) {
     if (root.dataset.carouselInit === "true") return;
     root.dataset.carouselInit = "true";
@@ -302,6 +325,93 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
       },
       { passive: true },
     );
+
+    /**
+     * Autoplay — only active when `autoplay` (ms) was passed and the user
+     * hasn't requested reduced motion. Pauses on hover/focus and when the
+     * tab is hidden; restarts after manual navigation. Registered in the
+     * cleanupFns array so astro:before-swap can tear it down cleanly.
+     */
+    const autoplayMs = Number(root.dataset.autoplay);
+    if (
+      autoplayMs &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      const ac = new AbortController();
+      const signal = ac.signal;
+      let intervalId: ReturnType<typeof setInterval> | null = null;
+      let paused = false;
+
+      const start = () => {
+        if (intervalId === null) intervalId = setInterval(next, autoplayMs);
+      };
+      const stop = () => {
+        if (intervalId !== null) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      };
+      const restart = () => {
+        stop();
+        start();
+      };
+
+      // Pause while the user is examining or interacting with the carousel.
+      root.addEventListener(
+        "pointerenter",
+        () => {
+          paused = true;
+          stop();
+        },
+        { signal },
+      );
+      root.addEventListener(
+        "pointerleave",
+        () => {
+          paused = false;
+          start();
+        },
+        { signal },
+      );
+      root.addEventListener(
+        "focusin",
+        () => {
+          paused = true;
+          stop();
+        },
+        { signal },
+      );
+      root.addEventListener(
+        "focusout",
+        () => {
+          paused = false;
+          start();
+        },
+        { signal },
+      );
+
+      // After any user-driven navigation, restart the clock so an autoplay
+      // tick doesn't immediately undo the manual choice.
+      root.addEventListener("click", restart, { signal });
+      root.addEventListener("keydown", restart, { signal });
+
+      // Pause when the tab is hidden; resume (if not hovered/focused) on
+      // return. Saves CPU and avoids surprising the user.
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (document.hidden) stop();
+          else if (!paused) start();
+        },
+        { signal },
+      );
+
+      start();
+      cleanupFns.push(() => {
+        stop();
+        ac.abort();
+      });
+    }
 
     render();
   }
