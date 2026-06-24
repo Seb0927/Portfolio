@@ -60,7 +60,7 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
   data-carousel
   data-autoplay={autoplay}
 >
-  <div class:list={["carousel-viewport relative w-full", aspectClass]}>
+  <div class:list={["carousel-viewport relative", aspectClass]}>
     <!--
       Track: aria-live here is a secondary announcement path (kept because
       it's harmless and may help some AT/browser pairs). The
@@ -123,6 +123,19 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
 <style>
   .carousel-viewport {
     perspective: 1000px;
+
+    /* Coverflow peek parameters — change these and the margin auto-adjusts */
+    --peek-x: 0.3;
+    --peek-scale: 0.75;
+
+    /* Overflow fraction per side: translate + (scale-1)/2 */
+    --peek-overflow: calc(var(--peek-x) + (var(--peek-scale) - 1) / 2);
+
+    /* Margin resolves against parent width, viewport against own width, so
+       solve the circular dep: margin% = overflow / (1 + 2*overflow) */
+    --peek-margin: calc(var(--peek-overflow) / (1 + 2 * var(--peek-overflow)));
+
+    margin-inline: calc(var(--peek-margin) * 100%);
   }
 
   .carousel-slide {
@@ -142,21 +155,23 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
   }
 
   .carousel-slide.is-prev {
-    transform: translateX(-30%) scale(0.75) rotateY(15deg) rotateZ(-10deg);
+    transform: translateX(calc(var(--peek-x) * -100%)) scale(var(--peek-scale))
+      rotateY(15deg) rotateZ(-10deg);
     opacity: 0.7;
     filter: blur(1px);
     z-index: 20;
   }
 
   .carousel-slide.is-next {
-    transform: translateX(30%) scale(0.75) rotateY(-15deg) rotateZ(10deg);
+    transform: translateX(calc(var(--peek-x) * 100%)) scale(var(--peek-scale))
+      rotateY(-15deg) rotateZ(10deg);
     opacity: 0.7;
     filter: blur(1px);
     z-index: 20;
   }
 
   .carousel-slide.is-hidden {
-    transform: translateX(0) scale(0.75) rotateY(0deg);
+    transform: translateX(0) scale(var(--peek-scale)) rotateY(0deg);
     opacity: 0;
     filter: blur(2px);
     z-index: 10;
