@@ -15,13 +15,13 @@ const { title, description, icons, image, imageAlt, imagePosition } =
   Astro.props;
 ---
 
-<section class="flex w-full flex-col gap-8 md:flex-row md:gap-12 lg:gap-16">
+<section class="flex w-full flex-col gap-8 md:gap-12 lg:flex-row lg:gap-16">
   {
     imagePosition === "left" && (
-      <div class="hidden min-h-full items-center justify-center md:flex">
-        <div class="flex size-full items-center justify-center rounded-4xl bg-white md:max-h-48 md:w-64 lg:max-h-56 lg:w-80 xl:w-88">
+      <div class="hidden flex-1 items-center justify-center lg:flex">
+        <div class="flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
           <Image
-            class="max-h-24 max-w-24"
+            class="h-5/12 min-h-16 object-scale-down"
             src={image}
             alt={imageAlt}
             layout="constrained"
@@ -31,15 +31,15 @@ const { title, description, icons, image, imageAlt, imagePosition } =
     )
   }
 
-  <div class="flex flex-1 flex-col gap-4 md:gap-4">
-    <h2 class="text-xl font-semibold md:text-3xl">{title}</h2>
+  <div class="flex flex-2 flex-col gap-4 lg:gap-4">
+    <h2 class="text-xl font-semibold lg:text-3xl">{title}</h2>
     <p>{description}</p>
 
     <div
-      class="my-2 flex min-h-full w-full items-center justify-center md:hidden"
+      class="my-2 flex min-h-full w-full items-center justify-center lg:hidden"
     >
       <div
-        class="flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white md:hidden"
+        class="flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white lg:hidden"
       >
         <Image
           class="max-h-20 max-w-20"
@@ -57,10 +57,10 @@ const { title, description, icons, image, imageAlt, imagePosition } =
 
   {
     imagePosition === "right" && (
-      <div class="hidden min-h-full items-center justify-center md:flex">
-        <div class="flex size-full items-center justify-center rounded-4xl bg-white md:max-h-48 md:w-64 lg:max-h-56 lg:w-80 xl:w-88">
+      <div class="hidden flex-1 items-center justify-center lg:flex">
+        <div class="flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
           <Image
-            class="max-h-24 max-w-24"
+            class="h-5/12 min-h-16 object-scale-down"
             src={image}
             alt={imageAlt}
             layout="constrained"
