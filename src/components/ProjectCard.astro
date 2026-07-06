@@ -15,10 +15,16 @@ const { title, description, icons, image, imageAlt, imagePosition } =
   Astro.props;
 ---
 
+<!--
+  min-w-0 on both flex children is required for Firefox: without it, the
+  default min-width: auto lets the aspect-video child's intrinsic width
+  feed back into the flex algorithm, breaking the layout. Chrome tolerates
+  this
+-->
 <section class="flex w-full flex-col gap-8 md:gap-12 lg:flex-row lg:gap-16">
   {
     imagePosition === "left" && (
-      <div class="hidden flex-1 items-center justify-center lg:flex">
+      <div class="hidden min-w-0 grow basis-0 items-center justify-center transition-[flex-grow] duration-300 ease-out lg:flex lg:hover:grow-[1.8] xl:hover:grow-[1.5]">
         <div class="flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
           <Image
             class="h-5/12 min-h-16 object-scale-down"
@@ -31,7 +37,7 @@ const { title, description, icons, image, imageAlt, imagePosition } =
     )
   }
 
-  <div class="flex flex-2 flex-col gap-4 lg:gap-4">
+  <div class="flex min-w-0 flex-2 flex-col justify-center gap-4 lg:gap-4">
     <h2 class="text-xl font-semibold lg:text-3xl">{title}</h2>
     <p>{description}</p>
 
@@ -57,7 +63,7 @@ const { title, description, icons, image, imageAlt, imagePosition } =
 
   {
     imagePosition === "right" && (
-      <div class="hidden flex-1 items-center justify-center lg:flex">
+      <div class="hidden min-w-0 grow basis-0 items-center justify-center transition-[flex-grow] duration-300 ease-out lg:flex lg:hover:grow-[1.8] xl:hover:grow-[1.5]">
         <div class="flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
           <Image
             class="h-5/12 min-h-16 object-scale-down"
