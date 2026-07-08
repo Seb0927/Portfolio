@@ -20,6 +20,12 @@ const projects = defineCollection({
       image: image(),
       imageAlt: z.string(),
       icons: z.array(z.string()),
+      demoVideo: z
+        .object({
+          mp4: z.string(),
+          webm: z.string(),
+        })
+        .optional(),
     }),
 });
 

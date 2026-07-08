@@ -17,24 +17,6 @@ const iconMap: Record<string, string> = {
 };
 
 const projects = await getCollection("projects");
-
-// Auto-discover demo videos by convention: src/assets/images/projects/<id>/output.{mp4,webm}
-// No manual imports — adding a new project just requires dropping the files in a folder
-// matching the markdown filename. Vite hashes + copies them at build time.
-const videoGlob = import.meta.glob(
-  "/src/assets/images/projects/*/output.{mp4,webm}",
-  { eager: true, query: "?url", import: "default" },
-) as Record<string, string>;
-
-const demoVideoMap: Record<string, { mp4: string; webm: string }> = {};
-for (const [path, url] of Object.entries(videoGlob)) {
-  const match = path.match(/\/projects\/([^/]+)\/output\.(mp4|webm)$/);
-  if (match) {
-    const [, projectId, ext] = match as [string, string, "mp4" | "webm"];
-    demoVideoMap[projectId] ??= { mp4: "", webm: "" };
-    demoVideoMap[projectId][ext] = url;
-  }
-}
 ---
 
 <Layout title="Projects" theme="purple" blobType="circle-pentagon">
@@ -52,7 +34,7 @@ for (const [path, url] of Object.entries(videoGlob)) {
           image={project.data.image}
           imageAlt={project.data.imageAlt}
           imagePosition={i % 2 === 0 ? "right" : "left"}
-          demoVideo={demoVideoMap[project.id]}
+          demoVideo={project.data.demoVideo}
         />
       ))
     }
