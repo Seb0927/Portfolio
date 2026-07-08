@@ -9,9 +9,10 @@ interface Props {
   image: ImageMetadata;
   imageAlt: string;
   imagePosition: "left" | "right";
+  demoVideo?: { mp4: string; webm: string };
 }
 
-const { title, description, icons, image, imageAlt, imagePosition } =
+const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
   Astro.props;
 ---
 
@@ -19,19 +20,36 @@ const { title, description, icons, image, imageAlt, imagePosition } =
   min-w-0 on both flex children is required for Firefox: without it, the
   default min-width: auto lets the aspect-video child's intrinsic width
   feed back into the flex algorithm, breaking the layout. Chrome tolerates
-  this
+  this; Firefox does not.
 -->
-<section class="flex w-full flex-col gap-8 md:gap-12 lg:flex-row lg:gap-16">
+<section
+  class="flex w-full flex-col gap-8 md:gap-12 lg:flex-row lg:gap-16"
+  data-project-card
+>
   {
     imagePosition === "left" && (
       <div class="hidden min-w-0 grow basis-0 items-center justify-center transition-[flex-grow] duration-300 ease-out lg:flex lg:hover:grow-[1.8] xl:hover:grow-[1.5]">
-        <div class="flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
+        <div class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
           <Image
-            class="h-5/12 min-h-16 object-scale-down"
+            class="h-5/12 min-h-16 object-scale-down transition-opacity duration-300 group-hover:opacity-0"
             src={image}
             alt={imageAlt}
             layout="constrained"
           />
+          {demoVideo && (
+            <video
+              class="absolute inset-0 size-full rounded-4xl object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              muted
+              loop
+              playsinline
+              preload="none"
+              data-demo-video
+              aria-label={`${imageAlt} demo`}
+            >
+              <source src={demoVideo.webm} type="video/webm" />
+              <source src={demoVideo.mp4} type="video/mp4" />
+            </video>
+          )}
         </div>
       </div>
     )
@@ -45,14 +63,32 @@ const { title, description, icons, image, imageAlt, imagePosition } =
       class="my-2 flex min-h-full w-full items-center justify-center lg:hidden"
     >
       <div
-        class="flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white lg:hidden"
+        data-mobile-container
+        class="relative flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white lg:hidden"
       >
         <Image
-          class="max-h-20 max-w-20"
+          data-mobile-icon
+          class="max-h-20 max-w-20 transition-opacity duration-300"
           src={image}
           alt={imageAlt}
           layout="constrained"
         />
+        {
+          demoVideo && (
+            <video
+              class="absolute inset-0 size-full rounded-4xl object-cover opacity-0 transition-opacity duration-300"
+              muted
+              loop
+              playsinline
+              preload="none"
+              data-mobile-demo-video
+              aria-label={`${imageAlt} demo`}
+            >
+              <source src={demoVideo.webm} type="video/webm" />
+              <source src={demoVideo.mp4} type="video/mp4" />
+            </video>
+          )
+        }
       </div>
     </div>
 
@@ -63,18 +99,136 @@ const { title, description, icons, image, imageAlt, imagePosition } =
 
   {
     imagePosition === "right" && (
-      <div class="hidden min-w-0 grow basis-0 items-center justify-center transition-[flex-grow] duration-300 ease-out lg:flex lg:hover:grow-[1.8] xl:hover:grow-[1.5]">
-        <div class="flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
+      <div class="hidden min-w-0 grow basis-0 items-center justify-center transition-[flex-grow] duration-300 ease-out hover:grow-[1.8] lg:flex xl:hover:grow-[1.5]">
+        <div class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
           <Image
-            class="h-5/12 min-h-16 object-scale-down"
+            class="h-5/12 min-h-16 object-scale-down transition-opacity duration-300 group-hover:opacity-0"
             src={image}
             alt={imageAlt}
             layout="constrained"
             loading="eager"
             fetchpriority="high"
           />
+          {demoVideo && (
+            <video
+              class="absolute inset-0 size-full rounded-4xl object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              muted
+              loop
+              playsinline
+              preload="none"
+              data-demo-video
+              aria-label={`${imageAlt} demo`}
+            >
+              <source src={demoVideo.webm} type="video/webm" />
+              <source src={demoVideo.mp4} type="video/mp4" />
+            </video>
+          )}
         </div>
       </div>
     )
   }
 </section>
+
+<style>
+  /*
+    Mobile video container growth: when the video is in the center band
+    (toggled by the IntersectionObserver via .is-active), the container
+    grows by ~10% in both dimensions. The transition is on the base rule
+    so it applies on both enter and leave. Values are 1.1× the Tailwind
+    base (h-48 = 12rem → 13.2rem; max-w-xs = 20rem → 22rem).
+  */
+  [data-mobile-container] {
+    transition:
+      height 300ms ease-out,
+      max-width 300ms ease-out;
+  }
+
+  [data-mobile-container].is-active {
+    height: 14rem;
+    max-width: 22rem;
+  }
+</style>
+
+<script>
+  // Demo video lifecycle. preload="none" on the <video> means zero bytes
+  // download until .play() is called. Desktop triggers play on hover;
+  // mobile uses IntersectionObserver to play only while in viewport.
+  // View Transitions safe: init on astro:page-load, teardown on
+  // astro:before-swap.
+  const cleanupFns: Array<() => void> = [];
+
+  function setupProjectCard(root: HTMLElement) {
+    if (root.dataset.projectCardInit === "true") return;
+    root.dataset.projectCardInit = "true";
+
+    const desktopVideo =
+      root.querySelector<HTMLVideoElement>("[data-demo-video]");
+    const mobileVideo = root.querySelector<HTMLVideoElement>(
+      "[data-mobile-demo-video]",
+    );
+
+    if (desktopVideo) {
+      // Play on hover, pause + reset on leave (saves CPU/GPU).
+      root.addEventListener("mouseenter", () => {
+        desktopVideo.play().catch(() => {});
+      });
+      root.addEventListener("mouseleave", () => {
+        desktopVideo.pause();
+        desktopVideo.currentTime = 0;
+      });
+    }
+
+    if (mobileVideo) {
+      // Play when scrolled into view, pause when offscreen. Opacity is
+      // JS-driven (not :hover) because touch devices don't trigger hover.
+      // Fade the video in only after .play() resolves so there's no flash
+      // of an empty frame (preload="none" loads nothing upfront).
+      const mobileIcon = root.querySelector<HTMLElement>("[data-mobile-icon]");
+      const mobileContainer = root.querySelector<HTMLElement>(
+        "[data-mobile-container]",
+      );
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              if (mobileContainer) mobileContainer.classList.add("is-active");
+              mobileVideo
+                .play()
+                .then(() => {
+                  mobileVideo.style.opacity = "1";
+                  if (mobileIcon) mobileIcon.style.opacity = "0";
+                })
+                .catch(() => {});
+            } else {
+              if (mobileContainer)
+                mobileContainer.classList.remove("is-active");
+              mobileVideo.pause();
+              mobileVideo.style.opacity = "0";
+              if (mobileIcon) mobileIcon.style.opacity = "1";
+            }
+          }
+        },
+        {
+          // Center band: trim 50% from top and bottom of the viewport so
+          // only the video overlapping the center ~30% plays. Prevents
+          // multiple videos from playing simultaneously on shrunken windows.
+          threshold: 0,
+          rootMargin: "-50% 0px -30% 0px",
+        },
+      );
+      io.observe(mobileVideo);
+      cleanupFns.push(() => io.disconnect());
+    }
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    document
+      .querySelectorAll<HTMLElement>("[data-project-card]")
+      .forEach(setupProjectCard);
+  });
+
+  document.addEventListener("astro:before-swap", () => {
+    cleanupFns.forEach((fn) => fn());
+    cleanupFns.length = 0;
+  });
+</script>
