@@ -26,6 +26,7 @@ const projects = defineCollection({
           webm: z.string(),
         })
         .optional(),
+      url: z.string(),
     }),
 });
 

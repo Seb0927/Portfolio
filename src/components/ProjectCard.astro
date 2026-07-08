@@ -10,10 +10,19 @@ interface Props {
   imageAlt: string;
   imagePosition: "left" | "right";
   demoVideo?: { mp4: string; webm: string };
+  url: string;
 }
 
-const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
-  Astro.props;
+const {
+  title,
+  description,
+  icons,
+  image,
+  imageAlt,
+  imagePosition,
+  demoVideo,
+  url,
+} = Astro.props;
 ---
 
 <!--
@@ -29,7 +38,13 @@ const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
   {
     imagePosition === "left" && (
       <div class="hidden min-w-0 grow basis-0 items-center justify-center transition-[flex-grow] duration-300 ease-out lg:flex lg:hover:grow-[1.8] xl:hover:grow-[1.5]">
-        <div class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Visit ${title}`}
+          class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           <Image
             class="h-5/12 min-h-16 object-scale-down transition-opacity duration-300 group-hover:opacity-0"
             src={image}
@@ -50,7 +65,7 @@ const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
               <source src={demoVideo.mp4} type="video/mp4" />
             </video>
           )}
-        </div>
+        </a>
       </div>
     )
   }
@@ -62,9 +77,13 @@ const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
     <div
       class="my-2 flex min-h-full w-full items-center justify-center lg:hidden"
     >
-      <div
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Visit ${title}`}
         data-mobile-container
-        class="relative flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white lg:hidden"
+        class="relative flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
       >
         <Image
           data-mobile-icon
@@ -89,7 +108,7 @@ const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
             </video>
           )
         }
-      </div>
+      </a>
     </div>
 
     <div class="flex w-full flex-row gap-8">
@@ -100,7 +119,13 @@ const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
   {
     imagePosition === "right" && (
       <div class="hidden min-w-0 grow basis-0 items-center justify-center transition-[flex-grow] duration-300 ease-out hover:grow-[1.8] lg:flex xl:hover:grow-[1.5]">
-        <div class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Visit ${title}`}
+          class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           <Image
             class="h-5/12 min-h-16 object-scale-down transition-opacity duration-300 group-hover:opacity-0"
             src={image}
@@ -123,7 +148,7 @@ const { title, description, icons, image, imageAlt, imagePosition, demoVideo } =
               <source src={demoVideo.mp4} type="video/mp4" />
             </video>
           )}
-        </div>
+        </a>
       </div>
     )
   }

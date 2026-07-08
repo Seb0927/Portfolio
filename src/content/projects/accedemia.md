@@ -12,4 +12,5 @@ icons:
 demoVideo:
   mp4: "/videos/accedemia/output.mp4"
   webm: "/videos/accedemia/output.webm"
+url: "https://accedemia.sidrobo.com/"
 ---

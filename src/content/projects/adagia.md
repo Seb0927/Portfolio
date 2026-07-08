@@ -11,4 +11,5 @@ icons:
 demoVideo:
   mp4: "/videos/adagia/output.mp4"
   webm: "/videos/adagia/output.webm"
+url: "https://blogs.elespectador.com/actualidad/tendencias-y-oportunidades/innovacion-sostenibilidad-pacifico-colombiano/#:~:text=ADAGIA"
 ---

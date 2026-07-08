@@ -35,6 +35,7 @@ const projects = await getCollection("projects");
           imageAlt={project.data.imageAlt}
           imagePosition={i % 2 === 0 ? "right" : "left"}
           demoVideo={project.data.demoVideo}
+          url={project.data.url}
         />
       ))
     }
