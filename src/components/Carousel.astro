@@ -24,6 +24,8 @@
  *  - Disabled entirely under prefers-reduced-motion: reduce.
  */
 import { Image } from "astro:assets";
+import { useTranslations } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
 
 interface Slide {
   src: ImageMetadata;
@@ -34,6 +36,7 @@ interface Props {
   slides: Slide[];
   aspect: "portrait" | "landscape";
   ariaLabel: string;
+  lang: Lang;
   class?: string;
   autoplay?: number;
 }
@@ -42,9 +45,12 @@ const {
   slides,
   aspect,
   ariaLabel,
+  lang,
   class: className = "",
   autoplay,
 } = Astro.props;
+
+const t = useTranslations(lang);
 
 const aspectClass = aspect === "portrait" ? "aspect-[4/5]" : "aspect-[4/3]";
 
@@ -59,6 +65,7 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
   aria-label={ariaLabel}
   data-carousel
   data-autoplay={autoplay}
+  data-announce-template={t("carousel.announce")}
 >
   <div class:list={["carousel-viewport relative", aspectClass]}>
     <!--
@@ -89,13 +96,20 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
   </div>
 
   <!--
-    Visually-hidden announcer. Updated on each render()
-    with "Photo X of N: <alt>" — this plain-text live region is what screen
-    readers reliably announce, since toggling aria-hidden on <img> elements
-    within a live region reads inconsistently across AT.
+    Visually-hidden announcer. Updated on each render() from the localized
+    data-announce-template ("Photo X of N: <alt>") — this plain-text live
+    region is what screen readers reliably announce, since toggling
+    aria-hidden on <img> elements within a live region reads inconsistently
+    across AT.
   -->
   <p class="carousel-announcer sr-only" aria-live="polite">
-    {`Photo 1 of ${slides.length}: ${slides[0].alt}`}
+    {
+      t("carousel.announce", {
+        current: 1,
+        total: slides.length,
+        alt: slides[0].alt,
+      })
+    }
   </p>
 
   <!--
@@ -113,7 +127,7 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
           type="button"
           class="carousel-dot size-3 cursor-pointer rounded-full transition focus-visible:outline-2 focus-visible:outline-offset-2"
           data-index={index}
-          aria-label={`Go to slide ${index + 1}`}
+          aria-label={t("carousel.goToSlide", { n: index + 1 })}
         />
       ))
     }
@@ -266,8 +280,15 @@ const useId = `carousel-${Math.random().toString(36).slice(2, 9)}`;
       });
 
       if (announcer) {
+        // Localized template rendered server-side into a data attribute
+        // (e.g. "Foto {current} de {total}: {alt}" for Spanish pages).
+        const template =
+          root.dataset.announceTemplate ?? "Photo {current} of {total}: {alt}";
         const img = slides[active].querySelector("img");
-        announcer.textContent = `Photo ${active + 1} of ${total}: ${img?.alt ?? ""}`;
+        announcer.textContent = template
+          .replace("{current}", String(active + 1))
+          .replace("{total}", String(total))
+          .replace("{alt}", img?.alt ?? "");
       }
     };
 

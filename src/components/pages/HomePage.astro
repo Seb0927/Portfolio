@@ -1,0 +1,102 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import TechIcon from "@/components/TechIcon.astro";
+import Carousel from "@/components/Carousel.astro";
+import { useTranslations } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
+import { siPython, siJavascript, siReact } from "simple-icons";
+import meImg from "@/assets/images/me/me.jpg";
+import meImg2 from "@/assets/images/me/me_2.jpg";
+import meImg3 from "@/assets/images/me/me_3.jpg";
+import ciatImg from "@/assets/images/career/CIAT.jpg";
+import githubImg from "@/assets/images/career/github.jpg";
+import truoraImg from "@/assets/images/career/truora.jpg";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Layout theme="green" blobType="rounded-star">
+  <PageTitle text={t("home.greeting")} />
+
+  <section class="flex w-full flex-col gap-8 lg:flex-row lg:gap-12 xl:gap-16">
+    <div
+      class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
+    >
+      <p>
+        {t("home.intro")}
+      </p>
+      <ul class="list-inside list-disc">
+        <li>{t("home.interest.devops")}</li>
+        <li>{t("home.interest.fullstack")}</li>
+        <li>{t("home.interest.datascience")}</li>
+      </ul>
+    </div>
+
+    <div class="flex flex-1 justify-center">
+      <Carousel
+        slides={[
+          { src: meImg, alt: t("home.slide.portraitAlt") },
+          { src: meImg2, alt: t("home.slide.meAlt") },
+          { src: meImg3, alt: t("home.slide.meAlt") },
+        ]}
+        aspect="landscape"
+        ariaLabel={t("home.carousel.photosAria")}
+        lang={lang}
+        autoplay={10_000}
+        class="my-auto w-full max-w-120 lg:min-w-sm xl:min-w-lg"
+      />
+    </div>
+  </section>
+
+  <section class="mt-16 w-full">
+    <h2 class="mb-8 text-center text-4xl font-semibold">
+      {t("home.aboutTitle")}
+    </h2>
+    <div
+      class="mb-12 flex w-full flex-col gap-8 md:mb-24 lg:flex-row lg:gap-12 xl:gap-16"
+    >
+      <div class="flex flex-1 justify-center">
+        <Carousel
+          slides={[
+            { src: ciatImg, alt: t("home.slide.ciatAlt") },
+            { src: githubImg, alt: t("home.slide.githubAlt") },
+            { src: truoraImg, alt: t("home.slide.truoraAlt") },
+          ]}
+          aspect="landscape"
+          ariaLabel={t("home.carousel.careerAria")}
+          lang={lang}
+          autoplay={10_000}
+          class="my-auto w-full max-w-120 lg:min-w-sm xl:min-w-lg"
+        />
+      </div>
+
+      <div
+        class="flex max-w-2xl flex-2 flex-col items-start justify-center gap-4"
+      >
+        <p>
+          {t("home.about.p1")}
+        </p>
+
+        <p>
+          {t("home.about.p2")}
+        </p>
+
+        <p>
+          {t("home.about.p3")}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex w-full flex-row items-center justify-between md:w-7/10">
+    <TechIcon svg={siPython.svg} ariaLabel="Python" />
+    <TechIcon svg={siJavascript.svg} ariaLabel="JavaScript" />
+    <TechIcon svg={siReact.svg} ariaLabel="React" />
+  </section>
+</Layout>

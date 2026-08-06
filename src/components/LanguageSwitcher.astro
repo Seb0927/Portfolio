@@ -1,0 +1,79 @@
+---
+/**
+ * LanguageSwitcher — a locale toggle styled as a miniature Navbar.
+ *
+ * Maps the current URL path to the equivalent route in each locale using
+ * Astro's i18n helpers, so switching language keeps the visitor on the
+ * same page. Mirrors Navbar's structure: a link row above a theme-color
+ * indicator bar, where the active locale gets the darkest overlay. The
+ * transition:name'd indicator slides between locales during View
+ * Transitions, just like the nav indicator does between pages.
+ *
+ * When the switcher renders more than once on a page (e.g. header on
+ * desktop + footer on mobile), pass a distinct `instance` per render so
+ * transition names stay unique — duplicated names break View Transitions.
+ */
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { languages, type Lang } from "@/i18n/ui";
+import { useTranslations, toLang } from "@/i18n/utils";
+
+interface Props {
+  /** Discriminator suffixed onto transition names (must be unique per page). */
+  instance: string;
+}
+
+const { instance } = Astro.props;
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+
+// Strip the "/es" prefix (if any) to get the locale-agnostic path.
+const pathWithoutLocale =
+  Astro.url.pathname.replace(/^\/es(?=\/|$)/, "") || "/";
+
+const localeLinks = (Object.keys(languages) as Lang[]).map((locale) => ({
+  locale,
+  label: locale.toUpperCase(),
+  href: getRelativeLocaleUrl(locale, pathWithoutLocale),
+  isActive: locale === lang,
+}));
+---
+
+<div class="w-20">
+  <nav aria-label={t("langSwitcher.ariaLabel")}>
+    <ul class="flex flex-row justify-center">
+      {
+        localeLinks.map(({ locale, label, href, isActive }) => (
+          <li
+            class="flex-1 p-2 text-center"
+            transition:name={`lang-switcher-${instance}-${locale}`}
+          >
+            <a
+              href={href}
+              hreflang={locale}
+              lang={locale}
+              class="block w-full rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-current={isActive ? "true" : undefined}
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="flex h-1.5 flex-row">
+    {
+      localeLinks.map(({ isActive }) => (
+        <div class="flex-1 bg-(--theme-default) transition-colors duration-700">
+          {isActive && (
+            <div
+              transition:name={`lang-indicator-${instance}`}
+              class="h-full w-full bg-(--theme-darkest)"
+            />
+          )}
+        </div>
+      ))
+    }
+  </div>
+</div>

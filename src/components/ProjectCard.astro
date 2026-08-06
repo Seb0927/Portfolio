@@ -11,6 +11,8 @@ interface Props {
   imagePosition: "left" | "right";
   demoVideo?: { mp4: string; webm: string };
   url: string;
+  /** Localized aria-label for the project link (e.g. "Visit Adagia"). */
+  visitLabel: string;
 }
 
 const {
@@ -22,6 +24,7 @@ const {
   imagePosition,
   demoVideo,
   url,
+  visitLabel,
 } = Astro.props;
 ---
 
@@ -42,7 +45,7 @@ const {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`Visit ${title}`}
+          aria-label={visitLabel}
           class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <Image
@@ -81,7 +84,7 @@ const {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Visit ${title}`}
+        aria-label={visitLabel}
         data-mobile-container
         class="relative flex size-full h-48 max-w-xs items-center justify-center rounded-4xl bg-white focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
       >
@@ -123,7 +126,7 @@ const {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`Visit ${title}`}
+          aria-label={visitLabel}
           class="group relative flex aspect-video w-full items-center justify-center rounded-4xl bg-white focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <Image

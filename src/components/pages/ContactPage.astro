@@ -1,0 +1,100 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import TechIcon from "@/components/TechIcon.astro";
+import { useTranslations } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
+import { siGithub } from "simple-icons";
+import linkedin from "@/assets/icons/linkedin.svg?raw";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const formActionUrl = "https://formsubmit.co/a9vata6qp@mozmail.com";
+---
+
+<Layout title={t("nav.contact")} theme="purple" blobType="circle-pentagon">
+  <PageTitle text={t("contact.title")} />
+  <div class="flex w-full flex-col gap-6 md:flex-row md:gap-24">
+    <section class="mb-4 flex w-full flex-col gap-6 md:w-1/2">
+      <p>
+        {t("contact.intro")}
+      </p>
+
+      <div
+        class="flex w-full flex-row justify-center gap-8 md:justify-start md:gap-12"
+      >
+        <a
+          href="https://github.com/Seb0927"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t("contact.githubAria")}
+        >
+          <TechIcon svg={siGithub.svg} class="size-8 md:size-14" />
+        </a>
+        <a
+          href="https://www.linkedin.com/in/sebastianidroboavirama/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t("contact.linkedinAria")}
+        >
+          <TechIcon svg={linkedin} class="size-8 md:size-14" />
+        </a>
+      </div>
+    </section>
+
+    <section class="flex w-full flex-col gap-6 md:w-1/2">
+      <p>{t("contact.formIntro")}</p>
+      <form class="w-full" action={formActionUrl} method="POST">
+        <div class="mb-6 flex flex-wrap lg:-ml-3">
+          <div class="w-full lg:mb-0 lg:w-1/4 lg:px-3">
+            <label class="mb-1 block text-sm italic" for="name"
+              >{t("contact.nameLabel")}</label
+            >
+            <input
+              class="mb-3 block w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black focus:ring-2 focus:ring-(--theme-darkest) focus:outline-none"
+              id="name"
+              type="text"
+              name="name"
+              required
+            />
+          </div>
+          <div class="w-full lg:mb-3 lg:w-3/4 lg:px-3">
+            <label class="mb-1 block text-sm italic" for="email"
+              >{t("contact.emailLabel")}</label
+            >
+            <input
+              class="mb-3 block w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black focus:ring-2 focus:ring-(--theme-darkest) focus:outline-none"
+              id="email"
+              type="email"
+              name="email"
+              required
+            />
+          </div>
+          <div class="w-full lg:px-3">
+            <label class="mb-1 block text-sm italic" for="message"
+              >{t("contact.messageLabel")}</label
+            >
+            <textarea
+              class="mb-6 block h-36 max-h-56 min-h-12 w-full appearance-none rounded bg-(--theme-light) px-4 py-3 text-black focus:ring-2 focus:ring-(--theme-darkest) focus:outline-none"
+              id="message"
+              name="message"
+              required></textarea>
+          </div>
+          <div class="mx-3 flex w-full justify-center">
+            <button
+              type="submit"
+              class="block cursor-pointer appearance-none rounded-full bg-(--theme-default) px-12 py-2 font-bold text-(--theme-darkest) hover:bg-(--theme-darkest) hover:text-(--theme-lightest)"
+            >
+              {t("contact.sendButton")}
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</Layout>

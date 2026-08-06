@@ -1,0 +1,184 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import ExperienceCard from "@/components/ExperienceCard.astro";
+import ExperiencePath from "@/components/ExperiencePath.astro";
+import { useTranslations } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
+import type { PathType } from "@/types";
+import { getCollection } from "astro:content";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+interface PathConnector {
+  type: PathType;
+  orderSm: number;
+  orderMd: number;
+  orderXl: number;
+  hiddenMd?: boolean;
+  hiddenXl?: boolean;
+}
+
+// Entry ids carry their locale folder (e.g. "en/panam-games").
+const experiences = (
+  await getCollection("experience", ({ id }) => id.startsWith(`${lang}/`))
+).sort(
+  (a, b) => a.data.date.localeCompare(b.data.date) || a.id.localeCompare(b.id),
+);
+
+/**
+ * Computes the CSS grid order for a timeline path connector at a given
+ * linear index within a grid that has `cols` card columns.
+ *
+ * The grid uses `cols + 2` columns (1 left-path column per card column
+ * + 1 right-path column), giving a step of `cols + 2` per row.
+ * Connectors alternate sides: even indices are left (odd-order cols),
+ * odd indices are right (even-order cols). Even rows flow left→right,
+ * odd rows flow right→left (snake pattern).
+ *
+ * @param index - Linear connector index (0-based, left side first)
+ * @param cols  - Number of card columns at this breakpoint (1, 2, or 3)
+ * @returns The CSS `order` value for this connector
+ */
+function lineOrder(index: number, cols: number): number {
+  const step = cols + 2;
+  const row = Math.floor(index / 2);
+  const side = index % 2;
+
+  if (row % 2 === 0) {
+    return row * step + (side === 0 ? 1 : step);
+  }
+
+  return row * step + (side === 0 ? step : 1);
+}
+
+/**
+ * Computes the CSS grid order for an experience card at a given index
+ * within a grid that has `cols` card columns.
+ *
+ * Cards start at order position 2 (after the left-path column) and
+ * follow a snake pattern: even rows flow left→right, odd rows flow
+ * right→left.
+ *
+ * @param index - Card index in the experiences array (0-based)
+ * @param cols  - Number of card columns at this breakpoint (1, 2, or 3)
+ * @returns The CSS `order` value for this card
+ */
+function cardOrder(index: number, cols: number): number {
+  const step = cols + 2;
+  const row = Math.floor(index / cols);
+  const col = index % cols;
+
+  const start = 2 + row * step;
+
+  if (row % 2 === 0) {
+    return start + col;
+  }
+
+  return start + (cols - 1 - col);
+}
+
+/**
+ * Generates the full set of timeline path connectors for `total` cards.
+ *
+ * Each card requires 2 connectors (left + right side), so this produces
+ * `total * 2` connectors. Connector types follow the snake pattern:
+ *   - Even rows: left→"top-left", right→"bottom-right"
+ *   - Odd rows:  left→"bottom-left", right→"top-right"
+ *
+ * Connectors beyond what a breakpoint's grid rows can fill are marked
+ * hidden at that breakpoint (e.g., 5 cards × 3 cols = 2 full rows,
+ * so pairs 2+ are `hiddenXl`).
+ *
+ * @param total - Number of experience cards
+ * @returns Array of PathConnector configs for the timeline
+ */
+function generateConnectors(total: number): PathConnector[] {
+  const mdCols = 2;
+  const xlCols = 3;
+  const mdRows = Math.ceil(total / mdCols);
+  const xlRows = Math.ceil(total / xlCols);
+
+  return Array.from({ length: total * 2 - 1 }, (_, i) => {
+    const pairIndex = Math.floor(i / 2);
+    const side = i % 2;
+    const evenRow = pairIndex % 2 === 0;
+
+    const type: PathType = evenRow
+      ? side === 0
+        ? "top-left"
+        : "bottom-right"
+      : side === 0
+        ? "bottom-left"
+        : "top-right";
+
+    return {
+      type,
+      orderSm: lineOrder(i, 1),
+      orderMd: lineOrder(i, mdCols),
+      orderXl: lineOrder(i, xlCols),
+      ...(pairIndex >= mdRows ? { hiddenMd: true } : {}),
+      ...(pairIndex >= xlRows ? { hiddenXl: true } : {}),
+    };
+  });
+}
+
+const connectors = generateConnectors(experiences.length);
+---
+
+<Layout
+  title={t("nav.experience")}
+  theme="amber"
+  blobType="diamond-medium-alternates"
+>
+  <PageTitle text={t("experience.title")} />
+
+  <ol
+    class="grid h-full w-full grid-cols-[auto_1fr_auto] overflow-visible md:grid-cols-[auto_1fr_1fr_auto] 2xl:grid-cols-[auto_1fr_1fr_1fr_auto]"
+  >
+    {
+      connectors.map((c) => (
+        <ExperiencePath
+          type={c.type}
+          orderSm={c.orderSm}
+          orderMd={c.orderMd}
+          orderXl={c.orderXl}
+          hiddenMd={c.hiddenMd}
+          hiddenXl={c.hiddenXl}
+        />
+      ))
+    }
+
+    {
+      experiences.map((exp, i) => (
+        <ExperienceCard
+          title={exp.data.title}
+          description={exp.data.description}
+          date={exp.data.date}
+          positionSm="top"
+          positionMd={i % 2 === 0 ? "top" : "bottom"}
+          positionXl={i % 3 === 1 ? "bottom" : "top"}
+          orderSm={cardOrder(i, 1)}
+          orderMd={cardOrder(i, 2)}
+          orderXl={cardOrder(i, 3)}
+        />
+      ))
+    }
+
+    <!-- Emtpy element for filling gaps -->
+    <li
+      class="experience-card relative order-6 hidden h-140 flex-1 flex-col items-center md:order-11 md:block 2xl:order-7 2xl:block"
+    >
+      <div
+        class="absolute top-1/2 left-0 -z-10 w-full border-t border-(--theme-darkest)"
+        aria-hidden="true"
+      >
+      </div>
+    </li>
+  </ol>
+</Layout>

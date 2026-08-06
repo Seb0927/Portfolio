@@ -1,5 +1,27 @@
 ---
-import { navLinks } from "@/constants/navigation";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { useTranslations, toLang } from "@/i18n/utils";
+
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+
+// Localized labels + locale-prefixed paths, so the active-path matching
+// and sliding-window logic below work unchanged in every locale.
+// getRelativeLocaleUrl emits trailing slashes ("/es/projects/"); strip them
+// to match the normalized currentPath below.
+const localizePath = (path: string) =>
+  getRelativeLocaleUrl(lang, path).replace(/\/$/, "") || "/";
+
+const navLinks = [
+  { label: t("nav.home"), path: localizePath("/") },
+  { label: t("nav.projects"), path: localizePath("/projects") },
+  { label: t("nav.blog"), path: localizePath("/blog") },
+  {
+    label: t("nav.experience"),
+    path: localizePath("/experience"),
+  },
+  { label: t("nav.contact"), path: localizePath("/contact") },
+];
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
@@ -17,7 +39,7 @@ if (indexPath <= 0) {
 
 <!-- Desktop nav: all 5 links -->
 <div class="z-10 mt-4 hidden w-full max-w-xl md:block">
-  <nav aria-label="Main navigation">
+  <nav aria-label={t("nav.ariaLabel")}>
     <ul class="flex flex-row justify-center">
       {
         navLinks.map((link) => (
@@ -59,7 +81,7 @@ if (indexPath <= 0) {
 
 <!-- Mobile nav: 3 visible links with sliding window -->
 <div class="z-10 mt-4 block w-full max-w-xs md:hidden">
-  <nav aria-label="Main navigation">
+  <nav aria-label={t("nav.ariaLabel")}>
     <ul class="flex flex-row justify-center">
       {
         mobileLinks.map((link) => (

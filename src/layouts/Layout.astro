@@ -4,36 +4,34 @@ import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
 import BackgroundBlobs from "@/components/BackgroundBlobs.astro";
 import Navbar from "@/components/Navbar.astro";
+import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
+import { useTranslations, toLang } from "@/i18n/utils";
 import type { Theme, BlobType } from "@/types";
 
 interface Props {
-  title: string;
+  /** Page title (localized). Omit on the home page for the bare site name. */
+  title?: string;
   theme: Theme;
   blobType: BlobType;
 }
 
 const { title, theme, blobType } = Astro.props;
-const isHome = title === "Home";
-const pageTitle = isHome
-  ? "Sebastian Idrobo Avirama"
-  : `${title} | Sebastian Idrobo Avirama`;
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const pageTitle = title
+  ? `${title} | Sebastian Idrobo Avirama`
+  : "Sebastian Idrobo Avirama";
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en" data-theme={theme}>
+<html lang={lang} data-theme={theme}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Sebastián Idrobo Avirama - Software Engineer portfolio showcasing projects, experience, and blog posts."
-    />
+    <meta name="description" content={t("meta.description")} />
     <meta property="og:title" content={pageTitle} />
-    <meta
-      property="og:description"
-      content="Sebastián Idrobo Avirama - Software Engineer portfolio showcasing projects, experience, and blog posts."
-    />
+    <meta property="og:description" content={t("meta.description")} />
     <meta property="og:type" content="website" />
     <meta
       property="og:image"
@@ -52,12 +50,33 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
   >
     <BackgroundBlobs type={blobType} />
 
-    <Navbar />
+    <!--
+      Header row: 1fr/auto/1fr grid keeps the Navbar exactly page-centered
+      while the LanguageSwitcher hugs the right edge of the content column,
+      tops aligned via matching mt-4. The Navbar wrapper is required: Navbar
+      renders two root divs (desktop/mobile), which would otherwise become
+      separate grid items and break the 3-track placement.
+    -->
+    <div
+      class="grid w-full max-w-7xl grid-cols-[1fr_minmax(0,20rem)_1fr] items-start px-8 md:grid-cols-[1fr_minmax(0,36rem)_1fr] md:px-0"
+    >
+      <div aria-hidden="true"></div>
+      <div class="md:pr-4">
+        <Navbar />
+      </div>
+      <div class="z-10 mt-4 hidden justify-self-end md:block">
+        <LanguageSwitcher instance="header" />
+      </div>
+    </div>
 
     <main
       class="flex h-full w-full max-w-7xl flex-1 flex-col items-center px-8 py-10"
     >
       <slot />
     </main>
+    <footer class="z-10 flex flex-col items-center justify-center md:hidden">
+      <p class="opacity-70">{t("langSwitcher.footerLabel")}</p>
+      <LanguageSwitcher instance="footer" />
+    </footer>
   </body>
 </html>

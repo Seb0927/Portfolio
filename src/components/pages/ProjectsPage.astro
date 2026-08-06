@@ -1,0 +1,56 @@
+---
+import { siReact, siNextdotjs, siTailwindcss, siGo } from "simple-icons";
+import azureIcon from "@/assets/icons/azure.svg?raw";
+import geminiIcon from "@/assets/icons/gemini.svg?raw";
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { useTranslations } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
+import { getCollection } from "astro:content";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const iconMap: Record<string, string> = {
+  react: siReact.svg,
+  nextdotjs: siNextdotjs.svg,
+  tailwindcss: siTailwindcss.svg,
+  go: siGo.svg,
+  azure: azureIcon,
+  gemini: geminiIcon,
+};
+
+// Entry ids carry their locale folder (e.g. "en/adagia", "es/adagia").
+const projects = await getCollection("projects", ({ id }) =>
+  id.startsWith(`${lang}/`),
+);
+---
+
+<Layout title={t("nav.projects")} theme="purple" blobType="circle-pentagon">
+  <PageTitle text={t("projects.title")} />
+
+  <div class="flex w-full flex-col gap-12 md:gap-20">
+    {
+      projects.map((project, i) => (
+        <ProjectCard
+          title={project.data.title}
+          description={project.data.description}
+          icons={project.data.icons.map((name) => ({
+            svg: iconMap[name],
+          }))}
+          image={project.data.image}
+          imageAlt={project.data.imageAlt}
+          imagePosition={i % 2 === 0 ? "right" : "left"}
+          demoVideo={project.data.demoVideo}
+          url={project.data.url}
+          visitLabel={t("project.visit", { title: project.data.title })}
+        />
+      ))
+    }
+  </div>
+</Layout>

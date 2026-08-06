@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import { useTranslations } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Layout title={t("nav.blog")} theme="green" blobType="rounded-star">
+  <PageTitle text={t("nav.blog")} />
+  <p class="mt-8 text-xl">{t("blog.wip")}</p>
+</Layout>
