@@ -146,7 +146,7 @@ export const ui = {
     "contact.sendButton": "Enviar",
 
     // Blog page
-    "blog.wip": "¡Trabajo en progreso!",
+    "blog.wip": "Esta sección se encuentra en construcción",
 
     // 404 page
     "notFound.title": "No encontrado",
