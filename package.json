@@ -17,14 +17,14 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.1.7",
+    "astro": "^7.2.10",
     "simple-icons": "^16.16.0",
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
     "@typescript-eslint/parser": "^8.60.1",
     "eslint": "10.2.1",
     "eslint-plugin-astro": "1.7.0",
