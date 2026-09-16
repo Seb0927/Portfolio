@@ -30,8 +30,14 @@ contact page.
 | `npm run format` / `format:check` | Prettier write / check (has `prettier-plugin-astro` + `prettier-plugin-tailwindcss`) |
 
 Pre-commit hook (husky + lint-staged) runs `prettier --write` and `eslint --fix`
-on staged files. **Always verify changes with `npm run lint && npm run check &&
-npm run build`** before considering work done.
+on staged files; pre-push runs `npm run check`. **Always verify changes with
+`npm run lint && npm run check && npm run build`** before considering work done.
+
+> **Husky setup (manual, once per clone):** `.npmrc` sets `ignore-scripts=true`,
+> so `npm install` never runs the `prepare` script and git hooks stay unwired
+> (`core.hooksPath` unset, `.husky/_` missing). After cloning, run
+> `npm run prepare` to enable them, then confirm with
+> `git config core.hooksPath` (should print `.husky/_`).
 
 ## Directory Structure
 
