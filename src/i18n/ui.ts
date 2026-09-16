@@ -139,7 +139,7 @@ export const ui = {
     "contact.githubAria": "Perfil de GitHub",
     "contact.linkedinAria": "Perfil de LinkedIn",
     "contact.formIntro":
-      "O si lo prefieres, no dudes en escribirme. Sin compromiso.",
+      "O si lo prefieres, puedes escribirme. Sin compromiso.",
     "contact.nameLabel": "Nombre:",
     "contact.emailLabel": "Correo electrónico:",
     "contact.messageLabel": "Mensaje:",
