@@ -1,0 +1,63 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  title: string;
+  description: string;
+  /** ISO timestamp for `<time datetime>`. */
+  datetime: string;
+  /** Pre-formatted, localized display date. */
+  dateLabel: string;
+  /** Localized URL of the post. */
+  url: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+}
+
+const { title, description, datetime, dateLabel, url, image, imageAlt } =
+  Astro.props;
+---
+
+<li
+  class="border-b border-(--theme-light) py-8 first:pt-0 last:border-b-0 last:pb-0"
+>
+  <article
+    class="flex w-full flex-col items-center gap-6 md:flex-row md:items-stretch md:gap-10"
+  >
+    <div class="flex min-w-0 flex-1 flex-col items-start justify-center gap-2">
+      <p class="text-sm opacity-70">
+        <time datetime={datetime}>{dateLabel}</time>
+      </p>
+      <h2 class="text-2xl font-semibold md:text-3xl">
+        <a
+          href={url}
+          class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          {title}
+        </a>
+      </h2>
+      <p class="max-w-2xl">{description}</p>
+    </div>
+
+    {
+      image && (
+        <div class="order-first flex w-full shrink-0 items-center justify-center md:order-last md:w-64 lg:w-72">
+          {/* Redundant link for mouse pointer users: hidden from the a11y tree and
+              tab order so the title stays the only announced link. */}
+          <a
+            href={url}
+            aria-hidden="true"
+            tabindex="-1"
+            class="block w-full rounded-2xl"
+          >
+            <Image
+              src={image}
+              alt={imageAlt ?? ""}
+              class="aspect-video w-full rounded-2xl object-cover"
+            />
+          </a>
+        </div>
+      )
+    }
+  </article>
+</li>

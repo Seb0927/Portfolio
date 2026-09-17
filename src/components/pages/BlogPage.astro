@@ -1,8 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
+import BlogPostCard from "@/components/BlogPostCard.astro";
 import { useTranslations } from "@/i18n/utils";
 import type { Lang } from "@/i18n/ui";
+import {
+  getBlogPosts,
+  blogSlug,
+  blogPostUrl,
+  formatBlogDate,
+} from "@/utils/blog";
 
 interface Props {
   lang: Lang;
@@ -10,9 +17,29 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const posts = await getBlogPosts(lang);
 ---
 
 <Layout title={t("nav.blog")} theme="green" blobType="rounded-star">
   <PageTitle text={t("nav.blog")} />
-  <p class="mt-8 text-center text-xl">{t("blog.wip")}</p>
+
+  {
+    posts.length === 0 ? (
+      <p class="mt-8 text-center text-xl">{t("blog.empty")}</p>
+    ) : (
+      <ul class="flex w-full flex-col" aria-label={t("blog.listAria")}>
+        {posts.map((post) => (
+          <BlogPostCard
+            title={post.data.title}
+            description={post.data.description}
+            datetime={post.data.date.toISOString()}
+            dateLabel={formatBlogDate(post.data.date, lang)}
+            url={blogPostUrl(lang, blogSlug(post))}
+            image={post.data.image}
+            imageAlt={post.data.imageAlt}
+          />
+        ))}
+      </ul>
+    )
+  }
 </Layout>

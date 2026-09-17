@@ -30,4 +30,22 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { experience, projects };
+const blog = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+  schema: ({ image }) =>
+    z
+      .object({
+        title: z.string(),
+        description: z.string(),
+        date: z.coerce.date(),
+        image: image().optional(),
+        imageAlt: z.string().optional(),
+        draft: z.boolean().default(false),
+      })
+      .refine((data) => !data.image || data.imageAlt, {
+        message: "`imageAlt` is required when `image` is set.",
+        path: ["imageAlt"],
+      }),
+});
+
+export const collections = { experience, projects, blog };

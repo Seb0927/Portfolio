@@ -1,0 +1,58 @@
+---
+import { Image } from "astro:assets";
+import { render, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import { useTranslations } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
+import { blogIndexUrl, formatBlogDate } from "@/utils/blog";
+
+interface Props {
+  lang: Lang;
+  entry: CollectionEntry<"blog">;
+}
+
+const { lang, entry } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(entry);
+---
+
+<Layout
+  title={entry.data.title}
+  description={entry.data.description}
+  theme="green"
+  blobType="rounded-star"
+>
+  <article class="flex w-full flex-col items-center">
+    <PageTitle text={entry.data.title} />
+
+    <p class="mb-8 text-sm opacity-70">
+      <time datetime={entry.data.date.toISOString()}>
+        {formatBlogDate(entry.data.date, lang)}
+      </time>
+    </p>
+
+    {
+      entry.data.image && (
+        <div class="mb-12 flex w-full justify-center">
+          <Image
+            src={entry.data.image}
+            alt={entry.data.imageAlt ?? ""}
+            class="max-h-112 w-full max-w-3xl rounded-3xl object-cover"
+          />
+        </div>
+      )
+    }
+
+    <div class="markdown-content w-full max-w-3xl">
+      <Content />
+    </div>
+
+    <a
+      href={blogIndexUrl(lang)}
+      class="mt-12 rounded-sm font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+    >
+      ← {t("blog.back")}
+    </a>
+  </article>
+</Layout>

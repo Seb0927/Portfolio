@@ -73,7 +73,9 @@ export const ui = {
     "contact.sendButton": "Send",
 
     // Blog page
-    "blog.wip": "Work in Progress!",
+    "blog.empty": "No posts yet. Come back soon!",
+    "blog.listAria": "Blog posts",
+    "blog.back": "Back to blog",
 
     // 404 page
     "notFound.title": "Not Found",
@@ -146,7 +148,9 @@ export const ui = {
     "contact.sendButton": "Enviar",
 
     // Blog page
-    "blog.wip": "Esta sección se encuentra en construcción",
+    "blog.empty": "Aún no hay publicaciones. ¡Vuelve pronto!",
+    "blog.listAria": "Publicaciones del blog",
+    "blog.back": "Volver al blog",
 
     // 404 page
     "notFound.title": "No encontrado",
