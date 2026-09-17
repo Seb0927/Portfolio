@@ -8,7 +8,7 @@ draft: false
 ---
 
 This is a sample post that showcases what the blog can render. It exists so the
-layout, the typography and the footnotes can be verified end to end[^1]
+layout, the typography and the footnotes can be verified end to end[^1].
 
 ## What is supported
 

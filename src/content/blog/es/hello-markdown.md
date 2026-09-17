@@ -9,7 +9,7 @@ draft: false
 
 Esta es una publicación de ejemplo que muestra lo que el blog puede renderizar.
 Existe para verificar de punta a punta el diseño, la tipografía y las notas al
-pie[^1]
+pie[^1].
 
 ## Qué está soportado
 
