@@ -11,16 +11,19 @@ import type { Theme, BlobType } from "@/types";
 interface Props {
   /** Page title (localized). Omit on the home page for the bare site name. */
   title?: string;
+  /** Page-specific meta description. Falls back to the site-wide one. */
+  description?: string;
   theme: Theme;
   blobType: BlobType;
 }
 
-const { title, theme, blobType } = Astro.props;
+const { title, description, theme, blobType } = Astro.props;
 const lang = toLang(Astro.currentLocale);
 const t = useTranslations(lang);
 const pageTitle = title
   ? `${title} | Sebastian Idrobo Avirama`
   : "Sebastian Idrobo Avirama";
+const pageDescription = description ?? t("meta.description");
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
@@ -29,9 +32,9 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={t("meta.description")} />
+    <meta name="description" content={pageDescription} />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={t("meta.description")} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content="website" />
     <meta
       property="og:image"
@@ -70,7 +73,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
     </div>
 
     <main
-      class="flex h-full w-full max-w-7xl flex-1 flex-col items-center px-8 py-10"
+      class="flex h-full w-full max-w-7xl flex-1 flex-col items-center px-8 py-10 md:py-6"
     >
       <slot />
     </main>
