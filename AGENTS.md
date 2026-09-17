@@ -130,9 +130,12 @@ an `instance` prop and suffix the names (`lang-indicator-header/footer`).
 
 ### 7. Assets
 
-- Content images: referenced from Markdown frontmatter with **relative paths**
-  and validated via the schema's `image()` helper (processed/optimized by
-  `astro:assets`). If you move a Markdown file a level deeper, add one `../`.
+- Content images: referenced from Markdown frontmatter (or in the body) and
+  validated via the schema's `image()` helper (processed/optimized by
+  `astro:assets`). Both the `@/*` alias (e.g. `@/assets/images/...`) and
+  file-relative paths (e.g. `../../../assets/...`) resolve. The blog uses the
+  alias; `projects`/`experience` use relative paths — if you use relative paths
+  and move a Markdown file a level deeper, add one `../`.
 - Videos and other large media: `public/` (predictable URLs, no hashing) with
   `preload="none"` + JS-triggered `.play()` for lazy loading.
 - SVGs imported as raw strings: `import icon from "@/assets/icons/x.svg?raw"`.
