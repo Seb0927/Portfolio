@@ -25,15 +25,27 @@ const navLinks = [
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
-const indexPath = navLinks.findIndex((link) => link.path === currentPath);
+// A link is active when it equals the current path or is an ancestor segment
+// of it (e.g. `/blog` on `/blog/my-post`). The longest match wins so the
+// locale root (`/es`) does not shadow its own children.
+const activeIndex = navLinks.reduce<number>((best, link, index) => {
+  const matches =
+    currentPath === link.path || currentPath.startsWith(`${link.path}/`);
+  if (!matches) return best;
+  return best === -1 || link.path.length > navLinks[best].path.length
+    ? index
+    : best;
+}, -1);
+
+const activePath = activeIndex >= 0 ? navLinks[activeIndex].path : undefined;
 
 let mobileLinks;
-if (indexPath <= 0) {
+if (activeIndex <= 0) {
   mobileLinks = navLinks.slice(0, 3);
-} else if (indexPath >= navLinks.length - 1) {
+} else if (activeIndex >= navLinks.length - 1) {
   mobileLinks = navLinks.slice(-3);
 } else {
-  mobileLinks = navLinks.slice(indexPath - 1, indexPath + 2);
+  mobileLinks = navLinks.slice(activeIndex - 1, activeIndex + 2);
 }
 ---
 
@@ -50,7 +62,7 @@ if (indexPath <= 0) {
             <a
               href={link.path}
               class="block w-full"
-              aria-current={currentPath === link.path ? "page" : undefined}
+              aria-current={link.path === activePath ? "page" : undefined}
             >
               {link.label}
             </a>
@@ -63,7 +75,7 @@ if (indexPath <= 0) {
   <div class="flex h-1.5 flex-row">
     {
       navLinks.map((link) => {
-        const isActive = currentPath === link.path;
+        const isActive = link.path === activePath;
         return (
           <div class="flex-1 bg-(--theme-default) transition-colors duration-700">
             {isActive && (
@@ -92,7 +104,7 @@ if (indexPath <= 0) {
             <a
               href={link.path}
               class="block w-full"
-              aria-current={currentPath === link.path ? "page" : undefined}
+              aria-current={link.path === activePath ? "page" : undefined}
             >
               {link.label}
             </a>
@@ -105,7 +117,7 @@ if (indexPath <= 0) {
   <div class="flex h-1.5 flex-row">
     {
       mobileLinks.map((link) => {
-        const isActive = currentPath === link.path;
+        const isActive = link.path === activePath;
         return (
           <div class="flex-1 bg-(--theme-default) transition-colors duration-700">
             {isActive && (
